@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
+  computeOverviewPayload,
   getMemorySnapshot,
   readCachedOverview,
   scheduleRefresh,
+  setMemorySnapshot,
+  writeCachedOverview,
   STALE_MS,
   type OverviewPayload,
   type CampEmployeeSummary,
@@ -39,24 +42,27 @@ export async function GET(request: NextRequest) {
       return respond(snap.payload, city, staffName, false);
     }
 
-    // 2) 快照过期 / 缺失 → 触发后台刷新
+    // 2) 快照过期 / 缺失 → 请求内同步聚合。
+    //    Serverless（Netlify）每次请求可能是新实例，后台异步刷新会随实例销毁而丢失，
+    //    只靠 scheduleRefresh 会永远 warming；因此这里必须同步算完并回填快照。
+    if (!snap) {
+      try {
+        const payload = await computeOverviewPayload({ timeoutMs: 20000, weakTimeoutMs: 15000 });
+        setMemorySnapshot(payload);
+        void writeCachedOverview(payload).catch(() => {});
+        return respond(payload, city, staffName, false);
+      } catch (computeErr) {
+        console.error('[camp-admin-overview] 同步聚合失败', computeErr);
+        // 同步失败才退回 Redis 暖缓存
+        const cached = await readCachedOverview({ timeoutMs: 3000 }).catch(() => null);
+        if (cached) return respond(cached, city, staffName, true);
+        throw computeErr;
+      }
+    }
+
+    // 3) 有旧快照：先返回略旧数据（快速），后台继续刷新
     scheduleRefresh();
-    if (snap) {
-      // 有旧快照：先返回略旧数据（快速），后台继续刷新
-      return respond(snap.payload, city, staffName, true);
-    }
-
-    // 3) 完全冷启动：尝试读 Redis 暖缓存（进程内无快照时，跨重启仍能快速恢复；短超时，读不到不拖慢）
-    const cached = await readCachedOverview({ timeoutMs: 3000 }).catch(() => null);
-    if (cached) {
-      return respond(cached, city, staffName, true);
-    }
-
-    // 4) 无任何可用数据源 → 明确返回 warming，后台正在填充
-    return NextResponse.json(
-      { success: false, warming: true, error: '后台数据正在初始化/刷新，请稍后重试。' },
-      { status: 503 },
-    );
+    return respond(snap.payload, city, staffName, true);
   } catch (error) {
     console.error('[camp-admin-overview] error', error);
     const message = error instanceof Error ? error.message : String(error);

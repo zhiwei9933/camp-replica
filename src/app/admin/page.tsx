@@ -572,6 +572,39 @@ export default function AdminPage() {
     }
   };
 
+  // 删除单条成绩记录（训练营 / 模拟对话 / 模拟训练）
+  const removeRecord = async (opts: {
+    type: 'camp' | 'quiz' | 'training';
+    city?: string;
+    staffName: string;
+    key: string;
+    submittedAt?: string;
+    label: string;
+  }) => {
+    if (!window.confirm(`确定删除「${opts.label}」这条记录？删除后不可恢复。`)) return;
+    try {
+      const res = await fetch('/api/admin/delete-record', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+        body: JSON.stringify({
+          type: opts.type,
+          city: opts.city || '',
+          staffName: opts.staffName,
+          key: opts.key,
+          submittedAt: opts.submittedAt || '',
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.success) {
+        window.alert(data?.error || '删除失败');
+        return;
+      }
+      await fetchAll();
+    } catch {
+      window.alert('网络错误，删除未完成');
+    }
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginName.trim() || !loginPwd) {
@@ -1278,11 +1311,12 @@ export default function AdminPage() {
                       <th className="px-4 py-3 text-center">星级</th>
                       <th className="px-4 py-3 text-center">状态</th>
                       <th className="px-4 py-3 text-left">提交时间</th>
+                      <th className="px-4 py-3 text-right">操作</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {filteredCamp.length === 0 ? (
-                      <tr><td colSpan={11} className="px-4 py-12 text-center text-slate-400">暂无训练营成绩</td></tr>
+                      <tr><td colSpan={12} className="px-4 py-12 text-center text-slate-400">暂无训练营成绩</td></tr>
                     ) : (
                       [...filteredCamp]
                         .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime())
@@ -1328,6 +1362,24 @@ export default function AdminPage() {
                                 )}
                               </td>
                               <td className="px-4 py-3 text-xs text-slate-400">{formatTime(r.submittedAt)}</td>
+                              <td className="px-4 py-3 text-right whitespace-nowrap">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    void removeRecord({
+                                      type: 'camp',
+                                      city: r.city,
+                                      staffName: r.staffName,
+                                      key: r.subId,
+                                      submittedAt: r.submittedAt,
+                                      label: `${r.staffName} · ${r.subId}`,
+                                    })
+                                  }
+                                  className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium text-red-600 border border-red-200 bg-red-50 hover:bg-red-100 transition-colors"
+                                >
+                                  删除
+                                </button>
+                              </td>
                             </tr>
                           );
                         })
@@ -1360,6 +1412,22 @@ export default function AdminPage() {
                       <span className="text-sm text-slate-500">第{r.chapterId}章</span>
                       <span className={`text-lg font-bold ${r.score >= 90 ? 'text-green-600' : r.score >= 70 ? 'text-orange-500' : 'text-red-500'}`}>{r.score}分</span>
                       {r.passed ? <Badge color="green">通过</Badge> : <Badge color="red">未通过</Badge>}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          void removeRecord({
+                            type: 'quiz',
+                            city: r.city,
+                            staffName: r.staffName,
+                            key: String(r.chapterId),
+                            submittedAt: r.submittedAt,
+                            label: `${r.staffName} · 第${r.chapterId}章`,
+                          })
+                        }
+                        className="ml-auto inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium text-red-600 border border-red-200 bg-red-50 hover:bg-red-100 transition-colors"
+                      >
+                        删除
+                      </button>
                     </div>
                     <p className="text-xs text-slate-400 mb-3">提交时间：{formatTime(r.submittedAt)}</p>
                     <div className="w-full">
@@ -1398,6 +1466,22 @@ export default function AdminPage() {
                       <span className="text-sm text-slate-500">{cityZh(r.city)}</span>
                       <span className="text-sm text-slate-600">第{r.roundNumber}轮 - {r.roundTitle}</span>
                       <span className={`text-lg font-bold ${r.totalScore >= 80 ? 'text-green-600' : r.totalScore >= 70 ? 'text-orange-500' : 'text-red-500'}`}>{r.totalScore}分</span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          void removeRecord({
+                            type: 'training',
+                            city: r.city,
+                            staffName: r.staffName,
+                            key: String(r.roundNumber),
+                            submittedAt: r.submittedAt,
+                            label: `${r.staffName} · 第${r.roundNumber}轮`,
+                          })
+                        }
+                        className="ml-auto inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium text-red-600 border border-red-200 bg-red-50 hover:bg-red-100 transition-colors"
+                      >
+                        删除
+                      </button>
                     </div>
                     <p className="text-xs text-slate-400 mb-3">提交时间：{formatTime(r.submittedAt)}</p>
                     <div className="mb-3">
@@ -1449,6 +1533,9 @@ export default function AdminPage() {
       {/* 删除离职学员：无管理口令时先要求口令 */}
       {tab === 'accounts' && adminUser?.role === 'super' && (
         <div className="space-y-6">
+          <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800">
+            这里是<strong>后台登录账号</strong>（超管 / 项目主管），不是学员账号。学员请到「数据总览」查看和删除。
+          </div>
           <div className="bg-white rounded-xl border border-slate-200 p-5">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-base font-bold text-slate-800">后台账号</h2>

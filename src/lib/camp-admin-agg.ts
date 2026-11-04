@@ -158,7 +158,13 @@ export async function computeOverviewPayload(opts?: {
   weakTimeoutMs?: number;
 }): Promise<OverviewPayload> {
   const results = await readAllResults({ timeoutMs: opts?.timeoutMs });
-  const weakEntries = await scanAllWeakEntries({ timeoutMs: opts?.weakTimeoutMs });
+  // 薄弱作答是辅助信息：扫描失败不应拖垮整个总览，降级为空即可
+  let weakEntries: WeakEntry[] = [];
+  try {
+    weakEntries = await scanAllWeakEntries({ timeoutMs: opts?.weakTimeoutMs });
+  } catch (e) {
+    console.warn('[camp-admin-agg] 薄弱条目扫描失败，降级为空', e instanceof Error ? e.message : e);
+  }
   return {
     computedAt: Date.now(),
     totalResults: results.length,
@@ -215,6 +221,15 @@ export function scheduleRefresh(): void {
 let memorySnapshot: { payload: OverviewPayload; at: number } | null = null;
 export function getMemorySnapshot(): { payload: OverviewPayload; at: number } | null {
   return memorySnapshot;
+}
+
+/**
+ * 同步计算结果回填内存快照。
+ * Serverless 环境（Netlify 等）每个请求可能是新实例，后台异步刷新跑不完就随实例销毁，
+ * 只靠 scheduleRefresh 会一直停留在 warming；因此请求内同步算完必须回填，下一次请求可直接命中。
+ */
+export function setMemorySnapshot(payload: OverviewPayload): void {
+  memorySnapshot = { payload, at: Date.now() };
 }
 
 /**
