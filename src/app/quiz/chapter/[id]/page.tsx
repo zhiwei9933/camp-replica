@@ -127,7 +127,7 @@ export default function ChapterQuizPage() {
     if (chapterId === 6) {
       // 直接从 localStorage 读取，避免依赖异步 state 更新
       const currentUserInfo = getUserInfo();
-      allQuestions = getChapter6Questions(currentUserInfo?.project || 'nanchang');
+      allQuestions = getChapter6Questions(currentUserInfo?.project || 'hefei');
     } else {
       allQuestions = chapterQuestionMap[chapterId] || [];
     }

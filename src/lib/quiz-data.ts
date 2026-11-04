@@ -218,37 +218,25 @@ export const storageUtils = {
 
 // 第6章题库导入
 import { chapter6CommonQuestions } from './quiz/chapter6-common';
-import { chapter6NanchangQuestions } from './quiz/chapter6-nanchang';
-import { chapter6ChangshaQuestions } from './quiz/chapter6-changsha';
-import { chapter6ShanghaiQuestions } from './quiz/chapter6-shanghai';
-import { chapter6NingboQuestions } from './quiz/chapter6-ningbo';
-import { chapter6WenzhouQuestions } from './quiz/chapter6-wenzhou';
-import { chapter6GanzhouQuestions } from './quiz/chapter6-ganzhou';
+import { chapter6HefeiQuestions } from './quiz/chapter6-hefei';
+import { chapter6HangzhouQuestions } from './quiz/chapter6-hangzhou';
 
 // 项目类型
-export type ProjectType = 'nanchang' | 'changsha' | 'shanghai' | 'ningbo' | 'wenzhou' | 'ganzhou';
+export type ProjectType = 'hefei' | 'hangzhou';
 
 // 项目名称映射
 export const projectNames: Record<ProjectType, string> = {
-  nanchang: '南昌',
-  changsha: '长沙',
-  shanghai: '上海',
-  ningbo: '宁波',
-  wenzhou: '温州',
-  ganzhou: '赣州'
+  hefei: '合肥',
+  hangzhou: '杭州'
 };
 
 // 获取第6章题库（根据项目类型组合通用题和城市专属题）
 export function getChapter6Questions(project: ProjectType): QuizQuestion[] {
   const cityQuestions: Record<ProjectType, QuizQuestion[]> = {
-    nanchang: chapter6NanchangQuestions,
-    changsha: chapter6ChangshaQuestions,
-    shanghai: chapter6ShanghaiQuestions,
-    ningbo: chapter6NingboQuestions,
-    wenzhou: chapter6WenzhouQuestions,
-    ganzhou: chapter6GanzhouQuestions
+    hefei: chapter6HefeiQuestions,
+    hangzhou: chapter6HangzhouQuestions
   };
 
-  // 通用题20 + 城市专属题10 = 30题
+  // 通用题 + 院区专属题
   return [...chapter6CommonQuestions, ...cityQuestions[project]];
 }

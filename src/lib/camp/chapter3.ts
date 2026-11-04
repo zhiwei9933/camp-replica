@@ -226,7 +226,7 @@ export const chapter3SubLevels: SubLevel[] = [
           {
             type: 'highlight',
             tone: 'info',
-            text: '温州中研是浙南唯一拥有美国进口 308 准分子激光的医院；赣州中研同样配备美国进口 308。这是重要差异化优势。',
+            text: '本院配备美国进口 Xtrac 308nm 准分子激光，可做局部精准光疗；同时有 311 窄谱 UVB 全身光疗舱覆盖大面积皮损。这是重要差异化优势。',
           },
         ],
       },

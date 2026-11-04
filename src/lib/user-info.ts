@@ -1,5 +1,5 @@
 // 用户信息类型
-export type ProjectType = 'nanchang' | 'changsha' | 'shanghai' | 'ningbo' | 'wenzhou' | 'ganzhou';
+export type ProjectType = 'hefei' | 'hangzhou';
 
 export interface UserInfo {
   name: string;
@@ -8,31 +8,19 @@ export interface UserInfo {
 
 // 项目名称映射
 export const PROJECT_NAMES: Record<ProjectType, string> = {
-  nanchang: '南昌',
-  changsha: '长沙',
-  shanghai: '上海',
-  ningbo: '宁波',
-  wenzhou: '温州',
-  ganzhou: '赣州',
+  hefei: '合肥',
+  hangzhou: '杭州',
 };
 
 export const PROJECT_HOSPITAL_NAMES: Record<ProjectType, string> = {
-  nanchang: '南昌国丹白癜风医院',
-  changsha: '长沙华研白癜风医院',
-  shanghai: '上海华研白癜风医院',
-  ningbo: '宁波华仁白癜风医院',
-  wenzhou: '温州中研白癜风医院',
-  ganzhou: '赣州中研白癜风医院',
+  hefei: '合肥天佑白癜风医院',
+  hangzhou: '杭州华研白癜风医院',
 };
 
 // 项目选项
 export const PROJECT_OPTIONS: { value: ProjectType; label: string; desc: string }[] = [
-  { value: 'nanchang', label: '南昌', desc: '南昌国丹医院' },
-  { value: 'changsha', label: '长沙', desc: '长沙华研医院' },
-  { value: 'shanghai', label: '上海', desc: '上海项目' },
-  { value: 'ningbo', label: '宁波', desc: '宁波项目' },
-  { value: 'wenzhou', label: '温州', desc: '温州中研白癜风医院' },
-  { value: 'ganzhou', label: '赣州', desc: '赣州中研白癜风医院' },
+  { value: 'hefei', label: '合肥', desc: '合肥天佑白癜风医院' },
+  { value: 'hangzhou', label: '杭州', desc: '杭州华研白癜风医院' },
 ];
 
 const STORAGE_KEY = 'quiz_user_info';

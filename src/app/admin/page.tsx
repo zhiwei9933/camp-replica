@@ -142,17 +142,13 @@ interface CampEmployeeSummary {
 }
 
 const CITY_SLUG_TO_ZH: Record<string, string> = {
-  nanchang: '南昌',
-  changsha: '长沙',
-  shanghai: '上海',
-  ningbo: '宁波',
-  wenzhou: '温州',
-  ganzhou: '赣州',
+  hefei: '合肥',
+  hangzhou: '杭州',
 };
 const CITY_ZH_TO_SLUG: Record<string, string> = Object.fromEntries(
   Object.entries(CITY_SLUG_TO_ZH).map(([k, v]) => [v, k]),
 );
-const CITY_OPTIONS = ['全部', '南昌', '长沙', '上海', '宁波', '温州', '赣州'];
+const CITY_OPTIONS = ['全部', '合肥', '杭州'];
 const CHAPTER_OPTIONS = ['全部', '第1章', '第2章', '第3章', '第4章', '第5章', '第6章'];
 
 const DIM_LABELS: Record<string, string> = {

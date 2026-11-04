@@ -9,12 +9,8 @@ import { chapter3Questions } from './chapter3';
 import { chapter4Questions } from './chapter4';
 import { chapter5Questions } from './chapter5';
 import { chapter6CommonQuestions } from './chapter6-common';
-import { chapter6NanchangQuestions } from './chapter6-nanchang';
-import { chapter6ChangshaQuestions } from './chapter6-changsha';
-import { chapter6ShanghaiQuestions } from './chapter6-shanghai';
-import { chapter6NingboQuestions } from './chapter6-ningbo';
-import { chapter6WenzhouQuestions } from './chapter6-wenzhou';
-import { chapter6GanzhouQuestions } from './chapter6-ganzhou';
+import { chapter6HefeiQuestions } from './chapter6-hefei';
+import { chapter6HangzhouQuestions } from './chapter6-hangzhou';
 import type { QuizQuestion, ChoiceQuestion, ShortQuestion } from '../quiz-data';
 
 const typeNames: Record<string, string> = {
@@ -81,23 +77,11 @@ async function main() {
   // 第6章通用题
   output += formatChapter(chapter6CommonQuestions, '6-通用', '医院信息与话术转化（通用题）');
 
-  // 第6章南昌专属
-  output += formatChapter(chapter6NanchangQuestions, '6-南昌', '南昌国丹专属题');
+  // 第6章合肥专属
+  output += formatChapter(chapter6HefeiQuestions, '6-合肥', '合肥天佑专属题');
 
-  // 第6章长沙专属
-  output += formatChapter(chapter6ChangshaQuestions, '6-长沙', '长沙华研专属题');
-
-  // 第6章上海专属
-  output += formatChapter(chapter6ShanghaiQuestions, '6-上海', '上海华研专属题');
-
-  // 第6章宁波专属
-  output += formatChapter(chapter6NingboQuestions, '6-宁波', '宁波华仁专属题');
-
-  // 第6章温州专属
-  output += formatChapter(chapter6WenzhouQuestions, '6-温州', '温州中研专属题');
-
-  // 第6章赣州专属
-  output += formatChapter(chapter6GanzhouQuestions, '6-赣州', '赣州中研专属题');
+  // 第6章杭州专属
+  output += formatChapter(chapter6HangzhouQuestions, '6-杭州', '杭州华研专属题');
 
   // 输出到控制台
   console.log(output);
