@@ -160,7 +160,15 @@ const DIM_LABELS: Record<string, string> = {
   communication: '话术',
 };
 
-type Tab = 'overview' | 'camp' | 'quiz' | 'training';
+type Tab = 'overview' | 'camp' | 'quiz' | 'training' | 'accounts';
+
+interface SafeAccount {
+  username: string;
+  name: string;
+  role: 'super' | 'manager';
+  city: string | null;
+  isDefault: boolean;
+}
 
 interface AdminUser {
   username: string;
@@ -214,6 +222,18 @@ export default function AdminPage() {
   const [pwdOld, setPwdOld] = useState('');
   const [pwdNew, setPwdNew] = useState('');
   const [pwdMsg, setPwdMsg] = useState('');
+
+  // 账号管理（仅超管）
+  const [accounts, setAccounts] = useState<SafeAccount[]>([]);
+  const [accLoading, setAccLoading] = useState(false);
+  const [accMsg, setAccMsg] = useState('');
+  const [accForm, setAccForm] = useState({
+    username: '',
+    name: '',
+    role: 'manager' as 'super' | 'manager',
+    city: 'hefei',
+    password: '',
+  });
 
   useEffect(() => {
     try {
@@ -456,6 +476,101 @@ export default function AdminPage() {
     const set = new Set(campResults.map((r) => r.subId));
     return ['全部', ...Array.from(set).sort()];
   }, [campResults]);
+
+  const loadAccounts = async () => {
+    setAccLoading(true);
+    setAccMsg('');
+    try {
+      const res = await fetch('/api/admin/accounts', { headers: { 'x-admin-token': adminToken } });
+      const data = await res.json();
+      if (!res.ok || !data?.success) {
+        setAccMsg(data?.error || '读取账号失败');
+        return;
+      }
+      setAccounts(Array.isArray(data.accounts) ? data.accounts : []);
+    } catch {
+      setAccMsg('网络错误');
+    } finally {
+      setAccLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (tab === 'accounts' && adminUser?.role === 'super' && adminToken) void loadAccounts();
+  }, [tab, adminUser, adminToken]);
+
+  const createAccount = async () => {
+    setAccMsg('');
+    const { username, name, role, city, password } = accForm;
+    if (!username.trim() || !password) {
+      setAccMsg('请填写账号和密码');
+      return;
+    }
+    try {
+      const res = await fetch('/api/admin/accounts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+        body: JSON.stringify({
+          username: username.trim(),
+          name: name.trim(),
+          role,
+          city: role === 'manager' ? city : null,
+          password,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.success) {
+        setAccMsg(data?.error || '新增失败');
+        return;
+      }
+      setAccMsg(`账号 ${username.trim()} 已创建`);
+      setAccForm({ username: '', name: '', role: 'manager', city: 'hefei', password: '' });
+      await loadAccounts();
+    } catch {
+      setAccMsg('网络错误');
+    }
+  };
+
+  const removeAccount = async (username: string) => {
+    if (!window.confirm(`确定删除账号「${username}」？删除后该账号无法再登录后台。`)) return;
+    setAccMsg('');
+    try {
+      const res = await fetch(`/api/admin/accounts?username=${encodeURIComponent(username)}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-token': adminToken },
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.success) {
+        setAccMsg(data?.error || '删除失败');
+        return;
+      }
+      setAccMsg(`账号 ${username} 已删除`);
+      await loadAccounts();
+    } catch {
+      setAccMsg('网络错误');
+    }
+  };
+
+  const resetAccPassword = async (username: string) => {
+    const np = window.prompt(`给「${username}」设置新密码（至少 6 位）：`);
+    if (!np) return;
+    setAccMsg('');
+    try {
+      const res = await fetch('/api/admin/accounts', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+        body: JSON.stringify({ username, newPassword: np }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.success) {
+        setAccMsg(data?.error || '重置失败');
+        return;
+      }
+      setAccMsg(`账号 ${username} 的密码已重置`);
+    } catch {
+      setAccMsg('网络错误');
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -757,6 +872,11 @@ export default function AdminPage() {
           <TabBtn active={tab === 'training'} onClick={() => setTab('training')}>
             模拟对话 ({trainingResults.length})
           </TabBtn>
+          {adminUser?.role === 'super' && (
+            <TabBtn active={tab === 'accounts'} onClick={() => setTab('accounts')}>
+              账号管理
+            </TabBtn>
+          )}
         </div>
 
         {/* Filters */}
@@ -1327,6 +1447,146 @@ export default function AdminPage() {
       </div>
 
       {/* 删除离职学员：无管理口令时先要求口令 */}
+      {tab === 'accounts' && adminUser?.role === 'super' && (
+        <div className="space-y-6">
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-base font-bold text-slate-800">后台账号</h2>
+              <button
+                onClick={loadAccounts}
+                className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm text-slate-600 hover:bg-slate-50"
+              >
+                刷新
+              </button>
+            </div>
+            {accMsg && (
+              <div className="mb-3 px-3 py-2 rounded-lg text-sm bg-sky-50 border border-sky-200 text-sky-700">{accMsg}</div>
+            )}
+            {accLoading ? (
+              <div className="text-sm text-slate-400 py-6 text-center">加载中...</div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-slate-500 border-b border-slate-200">
+                      <th className="py-2 pr-4 font-medium">账号</th>
+                      <th className="py-2 pr-4 font-medium">姓名</th>
+                      <th className="py-2 pr-4 font-medium">角色</th>
+                      <th className="py-2 pr-4 font-medium">所属项目</th>
+                      <th className="py-2 font-medium">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {accounts.map((a) => (
+                      <tr key={a.username} className="border-b border-slate-100 last:border-0">
+                        <td className="py-2.5 pr-4 font-mono text-slate-800">{a.username}</td>
+                        <td className="py-2.5 pr-4 text-slate-700">{a.name}</td>
+                        <td className="py-2.5 pr-4">
+                          <span className={`px-2 py-0.5 rounded-md text-xs font-medium ${a.role === 'super' ? 'bg-sky-50 text-sky-700 border border-sky-100' : 'bg-slate-50 text-slate-600 border border-slate-200'}`}>
+                            {a.role === 'super' ? '超级管理员' : '项目主管'}
+                          </span>
+                        </td>
+                        <td className="py-2.5 pr-4 text-slate-600">
+                          {a.role === 'super' ? '全部' : CITY_SLUG_TO_ZH[a.city || ''] || '—'}
+                        </td>
+                        <td className="py-2.5">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => resetAccPassword(a.username)}
+                              className="px-3 py-1 border border-slate-300 rounded-md text-xs text-slate-600 hover:bg-slate-50"
+                            >
+                              重置密码
+                            </button>
+                            <button
+                              onClick={() => removeAccount(a.username)}
+                              disabled={a.username === adminUser?.username}
+                              className="px-3 py-1 border border-red-200 rounded-md text-xs text-red-600 hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                              删除
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {accounts.length === 0 && (
+                      <tr>
+                        <td colSpan={5} className="py-6 text-center text-slate-400">暂无账号</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <h2 className="text-base font-bold text-slate-800 mb-4">新增账号</h2>
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">账号（英文）</label>
+                <input
+                  value={accForm.username}
+                  onChange={(e) => setAccForm({ ...accForm, username: e.target.value })}
+                  placeholder="如 hefei2"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">姓名</label>
+                <input
+                  value={accForm.name}
+                  onChange={(e) => setAccForm({ ...accForm, name: e.target.value })}
+                  placeholder="如 合肥主管张三"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">角色</label>
+                <select
+                  value={accForm.role}
+                  onChange={(e) => setAccForm({ ...accForm, role: e.target.value as 'super' | 'manager' })}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
+                >
+                  <option value="manager">项目主管</option>
+                  <option value="super">超级管理员</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">所属项目</label>
+                <select
+                  value={accForm.city}
+                  onChange={(e) => setAccForm({ ...accForm, city: e.target.value })}
+                  disabled={accForm.role === 'super'}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white disabled:bg-slate-50 disabled:text-slate-400"
+                >
+                  <option value="hefei">合肥</option>
+                  <option value="hangzhou">杭州</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">密码（至少 6 位）</label>
+                <input
+                  value={accForm.password}
+                  onChange={(e) => setAccForm({ ...accForm, password: e.target.value })}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                />
+              </div>
+            </div>
+            <div className="mt-4">
+              <button
+                onClick={createAccount}
+                className="px-4 py-2 bg-sky-500 text-white rounded-lg text-sm font-medium hover:bg-sky-600"
+              >
+                创建账号
+              </button>
+            </div>
+            <p className="mt-3 text-xs text-slate-400">
+              主管账号只能看自己项目的数据；超级管理员可以看全部，也能管理账号。
+            </p>
+          </div>
+        </div>
+      )}
+
       {pwdOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center px-4">
           <div className="w-full max-w-sm bg-white rounded-2xl p-6 shadow-xl">
