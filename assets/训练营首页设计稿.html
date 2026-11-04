@@ -1,0 +1,1341 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>白癜风客服训练营 V2.0 · 首页设计稿</title>
+<style>
+:root {
+  --bg: #F5F7FC;
+  --primary: #4F6BED;
+  --primary-dark: #3B54D4;
+  --primary-light: #EBF0FF;
+  --purple: #7B61FF;
+  --yellow: #FFB800;
+  --yellow-light: #FFF6E0;
+  --green: #00B578;
+  --green-light: #E6F9F1;
+  --orange: #FF8A3D;
+  --red: #FF5D5D;
+  --text: #1A1F36;
+  --text-secondary: #5C6378;
+  --text-tertiary: #979DB2;
+  --card: #FFFFFF;
+  --border: #E8EBF5;
+  --shadow: 0 1px 3px rgba(16,24,40,0.06), 0 1px 2px rgba(16,24,40,0.04);
+  --shadow-md: 0 4px 16px rgba(79,107,237,0.1);
+  --shadow-lg: 0 12px 40px rgba(79,107,237,0.15);
+  --radius: 12px;
+  --radius-lg: 16px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ===== Layout ===== */
+.page-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+/* ===== Top Nav ===== */
+.top-nav {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.top-nav { position: sticky; top: 0; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  gap: 32px;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--primary);
+  text-decoration: none;
+}
+.nav-logo-icon {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--primary), var(--purple));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+}
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
+.nav-link {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  transition: all .15s;
+}
+.nav-link:hover, .nav-link.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.nav-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+.nav-name { font-size: 13px; font-weight: 600; }
+.nav-badge {
+  background: var(--yellow-light);
+  color: var(--orange);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* ===== Hero Section ===== */
+.hero {
+  background: linear-gradient(135deg, #4F6BED 0%, #6B7FF0 40%, #7B61FF 100%);
+  border-radius: var(--radius-lg);
+  padding: 40px 48px;
+  margin-top: 28px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -40px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
+  border-radius: 50%;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: 30%;
+  width: 250px; height: 250px;
+  background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 70%);
+  border-radius: 50%;
+}
+.hero-left { position: relative; z-index: 1; }
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.hero h1 {
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+.hero p {
+  font-size: 15px;
+  opacity: 0.85;
+  max-width: 480px;
+}
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  margin-top: 24px;
+}
+.hero-stat .num {
+  font-size: 26px;
+  font-weight: 800;
+  display: block;
+  line-height: 1;
+}
+.hero-stat .label {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.hero-right {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+.hero-progress-card {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  backdrop-filter: blur(10px);
+  min-width: 220px;
+}
+.hero-progress-title {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-bottom: 8px;
+}
+.hero-progress-num {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+}
+.hero-progress-num span { font-size: 16px; opacity: 0.7; font-weight: 600; }
+.hero-progress-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.hero-progress-fill {
+  height: 100%;
+  width: 18.75%;
+  background: linear-gradient(90deg, #FFD166, #FFB800);
+  border-radius: 3px;
+}
+.hero-progress-meta {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ===== Full-width Leaderboard ===== */
+.leaderboard-full {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 24px 28px;
+  margin-top: 20px;
+}
+.lb-full-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.lb-full-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.lb-trophy { font-size: 28px; }
+.lb-full-title h2 { font-size: 20px; font-weight: 800; line-height: 1.2; }
+.lb-week { font-size: 12px; color: var(--text-tertiary); }
+.lb-tabs {
+  display: flex;
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+}
+.lb-tab {
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.lb-tab.active {
+  background: var(--card);
+  color: var(--primary);
+  box-shadow: var(--shadow);
+}
+.podium-full {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 16px;
+  padding: 10px 0 20px;
+}
+.podium-card {
+  text-align: center;
+  flex: 1;
+  max-width: 160px;
+  position: relative;
+}
+.podium-avatar-lg {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: #F0F1F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 8px;
+}
+.podium-card.gold .podium-avatar-lg {
+  width: 72px; height: 72px;
+  font-size: 36px;
+  background: linear-gradient(135deg, #FFF6E0, #FFE8A8);
+  border: 3px solid #FFD166;
+  box-shadow: 0 4px 16px rgba(255,209,102,0.4);
+}
+.podium-card.silver .podium-avatar-lg {
+  background: linear-gradient(135deg, #F5F6FA, #DDE0EA);
+  border: 3px solid #C8CCDA;
+  box-shadow: 0 4px 12px rgba(184,190,212,0.3);
+}
+.podium-card.bronze .podium-avatar-lg {
+  background: linear-gradient(135deg, #FFF0E0, #F5D8B8);
+  border: 3px solid #DCA878;
+  box-shadow: 0 4px 12px rgba(212,149,106,0.3);
+}
+.podium-crown {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+}
+.podium-medal { font-size: 20px; margin-bottom: 2px; }
+.podium-card.gold .podium-medal { display: none; }
+.podium-name-lg { font-size: 14px; font-weight: 700; }
+.podium-score-lg { font-size: 13px; color: var(--text-secondary); font-weight: 600; margin-top: 2px; }
+.podium-card.gold .podium-score-lg { color: var(--orange); font-size: 15px; }
+.podium-base {
+  margin-top: 10px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 18px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.gold-base { width: 100%; height: 44px; background: linear-gradient(180deg, #FFD166, #FFB800); }
+.silver-base { width: 82%; height: 34px; background: linear-gradient(180deg, #D8DCE8, #B0B6CC); }
+.bronze-base { width: 68%; height: 26px; background: linear-gradient(180deg, #E8B088, #C89060); }
+.reward-banner {
+  background: linear-gradient(135deg, #FFF6E0, #FFECC8);
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 13px;
+  color: #8B5E00;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.reward-gift { font-size: 18px; }
+.reward-banner strong { color: var(--orange); font-size: 15px; font-weight: 800; }
+.lb-full-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+}
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--border);
+}
+.lb-row:nth-last-child(-n+2) { border-bottom: none; }
+.lb-row.me {
+  grid-column: 1 / -1;
+  background: var(--primary-light);
+  border-radius: 8px;
+  padding: 10px 14px;
+  border-bottom: none;
+  margin-top: 4px;
+}
+.lb-row-rank {
+  width: 24px; text-align: center; font-size: 13px; font-weight: 700;
+  color: var(--text-tertiary); flex-shrink: 0;
+}
+.lb-row-rank.my-rank { color: var(--primary); }
+.lb-row-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #F0F1F5; display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+.lb-row-avatar.my-avatar { background: var(--primary); color: #fff; font-size: 12px; font-weight: 700; }
+.lb-row-name { font-size: 13px; font-weight: 600; flex-shrink: 0; }
+.lb-row-meta { font-size: 11px; color: var(--text-tertiary); margin-left: auto; white-space: nowrap; }
+.lb-row-score {
+  font-size: 14px; font-weight: 800; color: var(--primary);
+  flex-shrink: 0; min-width: 40px; text-align: right;
+}
+
+/* ===== Continue Learning Banner ===== */
+.continue-card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 24px 28px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-left: 4px solid var(--primary);
+}
+.continue-icon {
+  width: 56px; height: 56px;
+  background: var(--primary-light);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.continue-info { flex: 1; }
+.continue-label {
+  font-size: 12px;
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.continue-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.continue-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.continue-meta {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+.continue-tag {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+  box-shadow: 0 2px 8px rgba(79,107,237,0.3);
+}
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79,107,237,0.4);
+}
+.btn-primary:active { transform: translateY(0); }
+
+/* ===== Section Title ===== */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 32px 0 16px;
+}
+.section-title {
+  font-size: 20px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title .st-badge {
+  font-size: 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.section-link {
+  font-size: 13px;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+.section-link:hover { text-decoration: underline; }
+
+/* ===== Level Grid ===== */
+.level-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.level-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  position: relative;
+  transition: all .2s;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.level-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.level-card.locked {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+.level-card.locked:hover { transform: none; box-shadow: var(--shadow); }
+.level-card.completed {
+  border-color: var(--green);
+}
+.level-card.current {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+.level-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.level-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.level-status {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.status-completed { background: var(--green-light); color: var(--green); }
+.status-current { background: var(--primary-light); color: var(--primary); }
+.status-locked { background: #F0F1F5; color: var(--text-tertiary); }
+.status-boss { background: #FFF0E8; color: var(--orange); }
+
+.level-num {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.level-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.level-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.level-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.level-sub-count {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-weight: 600;
+}
+.level-stars {
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+.level-progress-mini {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+.level-progress-mini-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+/* Level color variants */
+.lc-1 { background: #EBF0FF; }
+.lc-2 { background: #E6F7FF; }
+.lc-3 { background: #FFF6E0; }
+.lc-4 { background: #E6F9F1; }
+.lc-5 { background: #F3EFFF; }
+.lc-6 { background: #FFEAF4; }
+.lc-7 { background: #E8F4FF; }
+.lc-8 { background: #FFF0E8; }
+
+/* ===== Two Column Layout ===== */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+  margin-top: 8px;
+}
+
+/* ===== Feature Cards (original style) ===== */
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.feature-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all .2s;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.feature-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.feature-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.feature-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+.fi-quiz { background: var(--primary-light); }
+.fi-ai { background: #F3EFFF; }
+.feature-title { font-size: 17px; font-weight: 700; }
+.feature-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.feature-stats {
+  display: flex;
+  gap: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.feature-stat {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+.feature-stat strong {
+  display: block;
+  font-size: 18px;
+  color: var(--text);
+  font-weight: 800;
+}
+.feature-arrow {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all .15s;
+}
+.feature-card:hover .feature-arrow {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* ===== Sidebar ===== */
+.sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+.sidebar-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+.sidebar-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Leaderboard */
+.lb-list { list-style: none; }
+.lb-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+.lb-item + .lb-item { border-top: 1px solid var(--border); }
+.lb-rank {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  background: #F0F1F5;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+.lb-rank.top1 { background: linear-gradient(135deg, #FFD166, #FFB800); color: #fff; }
+.lb-rank.top2 { background: linear-gradient(135deg, #D8DCE8, #B8BED4); color: #fff; }
+.lb-rank.top3 { background: linear-gradient(135deg, #E8B088, #D4956A); color: #fff; }
+.lb-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.lb-name { flex: 1; font-size: 13px; font-weight: 600; }
+.lb-score { font-size: 13px; font-weight: 700; color: var(--primary); }
+.lb-item.me {
+  background: var(--primary-light);
+  margin: 4px -8px;
+  padding: 8px;
+  border-radius: 8px;
+  border-top: none !important;
+}
+.lb-item.me + .lb-item { border-top: none; }
+.lb-reward {
+  background: linear-gradient(135deg, #FFF6E0, #FFECC8);
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: #8B5E00;
+  line-height: 1.6;
+}
+.lb-reward strong { color: var(--orange); }
+
+/* Rank card */
+.rank-card {
+  text-align: center;
+}
+.rank-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+.rank-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--green);
+}
+.rank-points {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+.rank-progress {
+  margin-top: 14px;
+}
+.rank-progress-bar {
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.rank-progress-fill {
+  height: 100%;
+  width: 61%;
+  background: linear-gradient(90deg, var(--green), #34D399);
+  border-radius: 4px;
+}
+.rank-next {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Quick links */
+.quick-list { list-style: none; }
+.quick-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 500;
+  transition: color .15s;
+}
+.quick-list li:last-child { border-bottom: none; }
+.quick-list li:hover { color: var(--primary); }
+.quick-list .qi-icon { font-size: 18px; }
+.quick-list .qi-arrow {
+  margin-left: auto;
+  color: var(--text-tertiary);
+  font-size: 12px;
+}
+
+/* ===== Footer ===== */
+.page-footer {
+  text-align: center;
+  padding: 40px 0 0;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* ===== Responsive ===== */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+@media print {
+  .top-nav, .page-footer { display: none; }
+  .hero { background: none !important; color: #000 !important; border: 1px solid #ccc; }
+  .level-card, .feature-card, .sidebar-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+}
+@media (max-width: 960px) {
+  .level-grid { grid-template-columns: repeat(2, 1fr); }
+  .two-col { grid-template-columns: 1fr; }
+  .sidebar { flex-direction: row; flex-wrap: wrap; }
+  .sidebar .sidebar-card { flex: 1; min-width: 280px; }
+}
+@media (max-width: 640px) {
+  .page-wrapper { padding: 0 16px 40px; }
+  .hero { flex-direction: column; gap: 24px; padding: 28px 24px; }
+  .hero h1 { font-size: 24px; }
+  .hero-stats { gap: 20px; flex-wrap: wrap; }
+  .level-grid { grid-template-columns: 1fr; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .continue-card { flex-direction: column; text-align: center; }
+  .continue-meta { justify-content: center; }
+  .sidebar { flex-direction: column; }
+  .leaderboard-full { padding: 18px 16px; }
+  .lb-full-list { grid-template-columns: 1fr; }
+  .podium-full { gap: 8px; }
+  .podium-card { max-width: 100px; }
+  .podium-avatar-lg { width: 44px !important; height: 44px !important; font-size: 22px !important; }
+  .podium-card.gold .podium-avatar-lg { width: 56px !important; height: 56px !important; font-size: 28px !important; }
+  .podium-name-lg { font-size: 12px; }
+  .podium-score-lg { font-size: 11px; }
+  .reward-banner { font-size: 12px; padding: 10px 14px; }
+  .lb-row-meta { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Top Navigation ===== -->
+<nav class="top-nav">
+  <div class="nav-inner">
+    <span class="nav-logo" role="button" tabindex="0">
+      <div class="nav-logo-icon">🏥</div>
+      白癜风客服训练营
+    </span>
+    <ul class="nav-links">
+      <li><span class="nav-link active" role="button" tabindex="0">首页</span></li>
+      <li><span class="nav-link" role="button" tabindex="0">闯关学习</span></li>
+      <li><span class="nav-link" role="button" tabindex="0">知识考核</span></li>
+      <li><span class="nav-link" role="button" tabindex="0">模拟对话</span></li>
+      <li><span class="nav-link" role="button" tabindex="0">排行榜</span></li>
+    </ul>
+    <div class="nav-right">
+      <span class="nav-badge">🔥 连续3天</span>
+      <div class="nav-user">
+        <div class="nav-avatar">👩</div>
+        <span class="nav-name">小李同学</span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+<main>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">🎯 V2.0 闯关模式已上线</div>
+      <h1>专业训练 · 游戏化闯关</h1>
+      <p>8大关卡16小关，每天10-15分钟，学练考闭环。通关即可上线接咨询，排行榜前三有奖励。</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="num">8</span>
+          <span class="label">大关卡</span>
+        </div>
+        <div class="hero-stat">
+          <span class="num">16</span>
+          <span class="label">小关卡</span>
+        </div>
+        <div class="hero-stat">
+          <span class="num">100+</span>
+          <span class="label">考核题</span>
+        </div>
+        <div class="hero-stat">
+          <span class="num">AI</span>
+          <span class="label">实战模拟</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-progress-card">
+        <div class="hero-progress-title">我的训练进度</div>
+        <div class="hero-progress-num">3<span>/16 关</span></div>
+        <div class="hero-progress-bar">
+          <div class="hero-progress-fill"></div>
+        </div>
+        <div class="hero-progress-meta">
+          <span>已完成 18.7%</span>
+          <span>🔥 3天连胜</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Leaderboard (Full Width, Top Priority) ===== -->
+  <section class="leaderboard-full">
+    <div class="lb-full-header">
+      <div class="lb-full-title">
+        <span class="lb-trophy">🏆</span>
+        <div>
+          <h2>本周积分榜</h2>
+          <span class="lb-week">第34周 · 距结算还有 2天14小时</span>
+        </div>
+      </div>
+      <div class="lb-tabs">
+        <span class="lb-tab active">本周</span>
+        <span class="lb-tab">本月</span>
+        <span class="lb-tab">总榜</span>
+      </div>
+    </div>
+
+    <!-- Podium -->
+    <div class="podium-full">
+      <div class="podium-card silver">
+        <div class="podium-medal">🥈</div>
+        <div class="podium-avatar-lg">👩‍💼</div>
+        <div class="podium-name-lg">王芳</div>
+        <div class="podium-score-lg">320分</div>
+        <div class="podium-base silver-base">
+          <span>2</span>
+        </div>
+      </div>
+      <div class="podium-card gold">
+        <div class="podium-crown">👑</div>
+        <div class="podium-medal">🥇</div>
+        <div class="podium-avatar-lg gold-avatar">👨‍💼</div>
+        <div class="podium-name-lg">张伟</div>
+        <div class="podium-score-lg">450分</div>
+        <div class="podium-base gold-base">
+          <span>1</span>
+        </div>
+      </div>
+      <div class="podium-card bronze">
+        <div class="podium-medal">🥉</div>
+        <div class="podium-avatar-lg">👩‍⚕️</div>
+        <div class="podium-name-lg">陈静</div>
+        <div class="podium-score-lg">280分</div>
+        <div class="podium-base bronze-base">
+          <span>3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reward Banner -->
+    <div class="reward-banner">
+      <span class="reward-gift">🎁</span>
+      <span>本周前三奖励：</span>
+      <strong>200元</strong>
+      <span style="opacity:0.5;">|</span>
+      <strong>100元</strong>
+      <span style="opacity:0.5;">|</span>
+      <strong>50元</strong>
+      <span>红包 + 电子证书</span>
+    </div>
+
+    <!-- Rank List -->
+    <div class="lb-full-list">
+      <div class="lb-row">
+        <span class="lb-row-rank">4</span>
+        <span class="lb-row-avatar">🧑‍💻</span>
+        <span class="lb-row-name">赵敏</span>
+        <span class="lb-row-meta">已通关5关 · ⭐⭐⭐</span>
+        <span class="lb-row-score">210</span>
+      </div>
+      <div class="lb-row">
+        <span class="lb-row-rank">5</span>
+        <span class="lb-row-avatar">👨‍🎓</span>
+        <span class="lb-row-name">刘洋</span>
+        <span class="lb-row-meta">已通关4关 · ⭐⭐</span>
+        <span class="lb-row-score">195</span>
+      </div>
+      <div class="lb-row me">
+        <span class="lb-row-rank my-rank">6</span>
+        <span class="lb-row-avatar my-avatar">我</span>
+        <span class="lb-row-name">小李同学（我）</span>
+        <span class="lb-row-meta">已通关3关 · 距前5差10分</span>
+        <span class="lb-row-score my-score">185</span>
+      </div>
+      <div class="lb-row">
+        <span class="lb-row-rank">7</span>
+        <span class="lb-row-avatar">👩‍🔬</span>
+        <span class="lb-row-name">周婷</span>
+        <span class="lb-row-meta">已通关3关 · ⭐⭐</span>
+        <span class="lb-row-score">170</span>
+      </div>
+      <div class="lb-row">
+        <span class="lb-row-rank">8</span>
+        <span class="lb-row-avatar">🧔</span>
+        <span class="lb-row-name">吴强</span>
+        <span class="lb-row-meta">已通关2关 · ⭐</span>
+        <span class="lb-row-score">120</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Continue Learning ===== -->
+  <section class="continue-card">
+    <div class="continue-icon">⚔️</div>
+    <div class="continue-info">
+      <div class="continue-label">继续学习</div>
+      <div class="continue-title">第1关 · 1-3 病因与误区</div>
+      <div class="continue-sub">分清病因和诱因，掌握三大误区的正确回应话术</div>
+      <div class="continue-meta">
+        <span class="continue-tag">⏱ 约12分钟</span>
+        <span class="continue-tag">📖 学4min + ⚔️ 练4min + ✅ 考4min</span>
+        <span class="continue-tag">⭐ 满分可得110分</span>
+      </div>
+    </div>
+    <button class="btn-primary">开始学习 →</button>
+  </section>
+
+  <!-- ===== Level Map ===== -->
+  <div class="section-header">
+    <div class="section-title">
+      🗺️ 闯关地图
+      <span class="st-badge">8关16小关</span>
+    </div>
+    <span class="section-link" role="button" tabindex="0">查看全部关卡 →</span>
+  </div>
+
+  <div class="level-grid">
+    <!-- Level 1: Current -->
+    <div class="level-card current">
+      <div class="level-card-header">
+        <div class="level-icon lc-1">🔬</div>
+        <span class="level-status status-current">进行中</span>
+      </div>
+      <div class="level-num">LEVEL 1</div>
+      <div class="level-name">认识白癜风</div>
+      <div class="level-desc">细胞层面机制、中医视角、病因与诱因、三大误区</div>
+      <div class="level-footer">
+        <span class="level-sub-count">3小关 · 2/3完成</span>
+        <span class="level-stars" style="color:var(--yellow);">⭐⭐<span style="color:var(--border);">⭐</span></span>
+      </div>
+      <div class="level-progress-mini">
+        <div class="level-progress-mini-fill" style="width:66%;background:var(--primary);"></div>
+      </div>
+    </div>
+
+    <!-- Level 2: Locked -->
+    <div class="level-card locked">
+      <div class="level-card-header">
+        <div class="level-icon lc-2">👁️</div>
+        <span class="level-status status-locked">🔒 未解锁</span>
+      </div>
+      <div class="level-num">LEVEL 2</div>
+      <div class="level-name">看懂病情</div>
+      <div class="level-desc">进展期vs稳定期、颜色判断、同形反应、6种方案</div>
+      <div class="level-footer">
+        <span class="level-sub-count">2小关 · 约24分钟</span>
+      </div>
+    </div>
+
+    <!-- Level 3: Locked -->
+    <div class="level-card locked">
+      <div class="level-card-header">
+        <div class="level-icon lc-3">🧰</div>
+        <span class="level-status status-locked">🔒 未解锁</span>
+      </div>
+      <div class="level-num">LEVEL 3</div>
+      <div class="level-name">我们的武器库</div>
+      <div class="level-desc">药物六兄弟、光疗与物理治疗、中医调理与病因筛查</div>
+      <div class="level-footer">
+        <span class="level-sub-count">3小关 · 约36分钟</span>
+      </div>
+    </div>
+
+    <!-- Level 4 -->
+    <div class="level-card locked">
+      <div class="level-card-header">
+        <div class="level-icon lc-4">🌱</div>
+        <span class="level-status status-locked">🔒 未解锁</span>
+      </div>
+      <div class="level-num">LEVEL 4</div>
+      <div class="level-name">明白怎么治</div>
+      <div class="level-desc">种地四步铁律、样板间策略、安全概念、特殊人群</div>
+      <div class="level-footer">
+        <span class="level-sub-count">2小关 · 约24分钟</span>
+      </div>
+    </div>
+
+    <!-- Level 5 -->
+    <div class="level-card locked">
+      <div class="level-card-header">
+        <div class="level-icon lc-5">🔍</div>
+        <span class="level-status status-locked">🔒 未解锁</span>
+      </div>
+      <div class="level-num">LEVEL 5</div>
+      <div class="level-name">挖出病根</div>
+      <div class="level-desc">5个问诊方向、反复发作原因、前兆线索、病因筛查</div>
+      <div class="level-footer">
+        <span class="level-sub-count">2小关 · 约24分钟</span>
+      </div>
+    </div>
+
+    <!-- Level 6 -->
+    <div class="level-card locked">
+      <div class="level-card-header">
+        <div class="level-icon lc-6">💬</div>
+        <span class="level-status status-locked">🔒 未解锁</span>
+      </div>
+      <div class="level-num">LEVEL 6</div>
+      <div class="level-name">讲到心坎里</div>
+      <div class="level-desc">费用/疗效/信任应对、距离犹豫处理、沟通红线</div>
+      <div class="level-footer">
+        <span class="level-sub-count">2小关 · 约24分钟</span>
+      </div>
+    </div>
+
+    <!-- Level 7 -->
+    <div class="level-card locked">
+      <div class="level-card-header">
+        <div class="level-icon lc-7">🏛️</div>
+        <span class="level-status status-locked">🔒 未解锁</span>
+      </div>
+      <div class="level-num">LEVEL 7</div>
+      <div class="level-name">我们的底气</div>
+      <div class="level-desc">首诊负责制、讲什么看时机、完整对话节奏</div>
+      <div class="level-footer">
+        <span class="level-sub-count">1小关 · 约12分钟</span>
+      </div>
+    </div>
+
+    <!-- Level 8: BOSS -->
+    <div class="level-card locked" style="border-color: transparent;">
+      <div class="level-card-header">
+        <div class="level-icon lc-8">🏆</div>
+        <span class="level-status status-boss">👑 BOSS</span>
+      </div>
+      <div class="level-num">LEVEL 8</div>
+      <div class="level-name">结业考核</div>
+      <div class="level-desc">综合笔试 + AI实战模拟，通关即可上线接咨询</div>
+      <div class="level-footer">
+        <span class="level-sub-count">终极考核 · 约20分钟</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Two Column: Features + Sidebar ===== -->
+  <div class="two-col">
+    <div>
+      <div class="section-header">
+        <div class="section-title">⚡ 训练中心</div>
+      </div>
+      <div class="feature-grid">
+        <!-- Knowledge Quiz -->
+        <div class="feature-card" role="button" tabindex="0">
+          <div class="feature-arrow">→</div>
+          <div class="feature-card-header">
+            <div class="feature-icon fi-quiz">📝</div>
+            <div class="feature-title">专业知识考核</div>
+          </div>
+          <div class="feature-desc">
+            8关16小关章节测试，选择题、判断题、口述题、情景题多种题型，70分通关，支持随机抽题和选项打乱。
+          </div>
+          <div class="feature-stats">
+            <div class="feature-stat"><strong>100+</strong>考核题</div>
+            <div class="feature-stat"><strong>4种</strong>题型</div>
+            <div class="feature-stat"><strong>70分</strong>通关线</div>
+          </div>
+        </div>
+
+        <!-- AI Training -->
+        <div class="feature-card" role="button" tabindex="0">
+          <div class="feature-arrow">→</div>
+          <div class="feature-card-header">
+            <div class="feature-icon fi-ai">🤖</div>
+            <div class="feature-title">AI模拟对话</div>
+          </div>
+          <div class="feature-desc">
+            AI扮演真实患者，5轮对话考察完整节奏，6维度评分雷达图，即时反馈每轮改进建议。
+          </div>
+          <div class="feature-stats">
+            <div class="feature-stat"><strong>6维</strong>度评分</div>
+            <div class="feature-stat"><strong>5轮</strong>对话</div>
+            <div class="feature-stat"><strong>即时</strong>反馈</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- My Rank -->
+      <div class="sidebar-card rank-card">
+        <div class="sidebar-title">🌿 我的段位</div>
+        <div class="rank-icon">🌿</div>
+        <div class="rank-name">略懂皮毛</div>
+        <div class="rank-points">当前积分 185 · 总排名 #6</div>
+        <div class="rank-progress">
+          <div class="rank-progress-bar">
+            <div class="rank-progress-fill"></div>
+          </div>
+          <div class="rank-next">
+            <span>距「渐入佳境」还差115分</span>
+            <span>300分</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="sidebar-card">
+        <div class="sidebar-title">📌 快捷入口</div>
+        <ul class="quick-list">
+          <li>
+            <span class="qi-icon">📚</span>
+            错题本
+            <span class="qi-arrow">→</span>
+          </li>
+          <li>
+            <span class="qi-icon">🎤</span>
+            口试录音记录
+            <span class="qi-arrow">→</span>
+          </li>
+          <li>
+            <span class="qi-icon">📜</span>
+            通关证书
+            <span class="qi-arrow">→</span>
+          </li>
+          <li>
+            <span class="qi-icon">⚙️</span>
+            管理后台
+            <span class="qi-arrow">→</span>
+          </li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+</main>
+  <!-- ===== Footer ===== -->
+  <footer class="page-footer">
+    白癜风客服训练营 V2.0 · 内部培训专用<br>
+    基于《白癜风诊疗共识（2024版）》及《专业框架》《专业话术》整理 · 不作为医疗建议
+  </footer>
+
+</div>
+
+<script>
+// Animate progress bars on load
+document.addEventListener('DOMContentLoaded', () => {
+  const fills = document.querySelectorAll('.hero-progress-fill, .rank-progress-fill, .level-progress-mini-fill');
+  fills.forEach(fill => {
+    const target = fill.style.width;
+    fill.style.width = '0%';
+    requestAnimationFrame(() => {
+      setTimeout(() => { fill.style.width = target; }, 300);
+    });
+  });
+});
+</script>
+</body>
+</html>

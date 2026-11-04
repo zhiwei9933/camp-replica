@@ -1,0 +1,8 @@
+node_modules
+.next
+dist
+.git
+.gitignore
+*.log
+.DS_Store
+camp-replica.zip

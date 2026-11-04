@@ -1,0 +1,1197 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>白癜风客服训练营 · 8关16小关结构设计</title>
+<style>
+:root {
+  --bg: #F7F8FF;
+  --primary: #5B6CFF;
+  --primary-light: #EEF0FF;
+  --yellow: #FFD166;
+  --pink: #FF7AB6;
+  --green: #55C59D;
+  --orange: #FF9F43;
+  --red: #FF6B6B;
+  --text: #1F2433;
+  --text-light: #6B7194;
+  --card: #FFFFFF;
+  --border: #E5E8F5;
+  --shadow: 0 2px 12px rgba(91,108,255,0.08);
+  --shadow-hover: 0 6px 24px rgba(91,108,255,0.15);
+  --radius: 12px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 960px; margin: 0 auto; padding: 0 20px 60px; }
+
+/* Header */
+header.hero {
+  background: linear-gradient(135deg, #5B6CFF 0%, #7B8AFF 50%, #9B7AFF 100%);
+  color: #fff;
+  padding: 48px 20px 40px;
+  text-align: center;
+  margin-bottom: 36px;
+}
+header.hero h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+header.hero p { font-size: 15px; opacity: 0.9; }
+.hero-stats {
+  display: flex; justify-content: center; gap: 32px; margin-top: 24px; flex-wrap: wrap;
+}
+.hero-stat { text-align: center; }
+.hero-stat .num { font-size: 32px; font-weight: 800; display: block; }
+.hero-stat .label { font-size: 12px; opacity: 0.8; }
+
+/* Nav */
+nav.toc {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow);
+}
+nav.toc h3 { font-size: 14px; color: var(--text-light); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+nav.toc ol { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+nav.toc a {
+  color: var(--text); text-decoration: none; font-size: 14px; padding: 6px 10px;
+  border-radius: 6px; display: flex; align-items: center; gap: 8px; transition: background .15s;
+}
+nav.toc a:hover { background: var(--primary-light); color: var(--primary); }
+.toc-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 6px; font-size: 11px; font-weight: 700; color: #fff;
+}
+
+/* Section */
+section.level {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  overflow: hidden;
+  transition: box-shadow .2s;
+}
+section.level:hover { box-shadow: var(--shadow-hover); }
+.level-header {
+  padding: 20px 24px;
+  display: flex; align-items: center; gap: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.level-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.level-header h2 { font-size: 18px; font-weight: 700; }
+.level-header .level-sub { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+.level-meta {
+  margin-left: auto; display: flex; gap: 8px; flex-shrink: 0;
+}
+.meta-tag {
+  font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600;
+}
+
+/* Sub-level */
+.sub-level {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.sub-level:last-child { border-bottom: none; }
+.sub-level-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.sub-level-num {
+  background: var(--primary-light); color: var(--primary);
+  font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 6px;
+}
+.sub-level-title { font-size: 15px; font-weight: 700; }
+.sub-level-time { font-size: 12px; color: var(--text-light); margin-left: auto; }
+
+/* Three columns: 学 练 考 */
+.lpc-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+}
+.lpc-card {
+  border-radius: 10px; padding: 14px; font-size: 13px; line-height: 1.6;
+}
+.lpc-card h4 { font-size: 12px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+.lpc-learn { background: #EEF0FF; }
+.lpc-learn h4 { color: var(--primary); }
+.lpc-practice { background: #FFF8E6; }
+.lpc-practice h4 { color: #C49000; }
+.lpc-exam { background: #E8F8F1; }
+.lpc-exam h4 { color: #2D9B6E; }
+.lpc-card ul { padding-left: 16px; }
+.lpc-card li { margin-bottom: 4px; }
+.lpc-card .time-badge {
+  display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 10px;
+  background: rgba(0,0,0,0.06); margin-top: 8px; font-weight: 600;
+}
+
+/* Question bank table */
+.qbank-section { padding: 20px 24px; background: #FAFBFF; border-top: 1px solid var(--border); }
+.qbank-section h4 { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text-light); }
+.qbank-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.qbank-table th {
+  text-align: left; padding: 8px 10px; background: var(--primary-light); color: var(--primary);
+  font-weight: 600; font-size: 12px;
+}
+.qbank-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.qbank-table tr:last-child td { border-bottom: none; }
+.q-type {
+  display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600;
+}
+.q-choice { background: #E8F0FF; color: #4A6CF7; }
+.q-judge { background: #FFF0E8; color: #E8740C; }
+.q-oral { background: #F0E8FF; color: #7C4DFF; }
+.q-scene { background: #E8F8F1; color: #2D9B6E; }
+.q-match { background: #FFE8F0; color: #E84A8A; }
+
+/* Schedule */
+.schedule-section {
+  background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 28px; margin-bottom: 24px;
+}
+.schedule-section h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.schedule-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;
+}
+.schedule-day {
+  border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center;
+  transition: transform .15s, box-shadow .15s;
+}
+.schedule-day:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.schedule-day .day-num { font-size: 11px; color: var(--text-light); font-weight: 600; }
+.schedule-day .day-title { font-size: 13px; font-weight: 700; margin: 4px 0; }
+.schedule-day .day-time { font-size: 11px; color: var(--green); font-weight: 600; }
+.schedule-day.boss { background: linear-gradient(135deg, #FFF5E6, #FFE8CC); border-color: #FFD166; }
+
+/* Summary cards */
+.summary-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px;
+}
+.summary-card {
+  background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
+  text-align: center;
+}
+.summary-card .sc-num { font-size: 36px; font-weight: 800; color: var(--primary); }
+.summary-card .sc-label { font-size: 13px; color: var(--text-light); margin-top: 4px; }
+
+/* Color variants for level icons */
+.bg-1 { background: #FFE8EC; color: #E84A6B; }
+.bg-2 { background: #E8F4FF; color: #2D8CF0; }
+.bg-3 { background: #FFF4E6; color: #F08C00; }
+.bg-4 { background: #E8F8F1; color: #2D9B6E; }
+.bg-5 { background: #F0E8FF; color: #7C4DFF; }
+.bg-6 { background: #FFE8F5; color: #E84A8A; }
+.bg-7 { background: #E6F7FF; color: #1890FF; }
+.bg-8 { background: #FFF0E8; color: #FA541C; }
+
+.tag-learn { background: #EEF0FF; color: var(--primary); }
+.tag-practice { background: #FFF8E6; color: #C49000; }
+.tag-exam { background: #E8F8F1; color: #2D9B6E; }
+.tag-new { background: #FFE8E8; color: #E84A4A; }
+.tag-reuse { background: #E8F8F1; color: #2D9B6E; }
+
+/* Tips */
+.tip-box {
+  background: #FFFBEB; border-left: 4px solid var(--yellow);
+  padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 13px;
+}
+.tip-box strong { color: #B8860B; }
+
+/* Footer */
+footer { text-align: center; padding: 32px 20px; color: var(--text-light); font-size: 12px; }
+
+/* Responsive */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+@media print {
+  header.hero { background: none !important; color: #000 !important; padding: 20px; }
+  section.level { box-shadow: none; break-inside: avoid; border: 1px solid #ddd; }
+  .schedule-day { break-inside: avoid; }
+  nav.toc { display: none; }
+}
+@media (max-width: 640px) {
+  .lpc-grid { grid-template-columns: 1fr; }
+  .level-header { flex-wrap: wrap; }
+  .level-meta { margin-left: 0; margin-top: 8px; }
+  header.hero h1 { font-size: 22px; }
+  .hero-stats { gap: 20px; }
+  .qbank-table { font-size: 12px; }
+  .qbank-table th, .qbank-table td { padding: 6px; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>白癜风客服训练营 · 闯关结构设计</h1>
+  <p>8大关卡 · 16个小关 · 每天10-15分钟 · 学练考闭环</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="num">8</span><span class="label">大关卡</span></div>
+    <div class="hero-stat"><span class="num">16</span><span class="label">小关卡</span></div>
+    <div class="hero-stat"><span class="num">~15</span><span class="label">天通关</span></div>
+    <div class="hero-stat"><span class="num">120+</span><span class="label">考核题</span></div>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- TOC -->
+<nav class="toc">
+  <h3>关卡导航</h3>
+  <ol>
+    <li><a href="#level1"><span class="toc-badge bg-1">1</span>认识白癜风 <span style="color:var(--text-light);font-size:12px">·3小关</span></a></li>
+    <li><a href="#level2"><span class="toc-badge bg-2">2</span>看懂病情 <span style="color:var(--text-light);font-size:12px">·2小关</span></a></li>
+    <li><a href="#level3"><span class="toc-badge bg-3">3</span>我们的武器库 <span style="color:var(--text-light);font-size:12px">·3小关</span></a></li>
+    <li><a href="#level4"><span class="toc-badge bg-4">4</span>明白怎么治 <span style="color:var(--text-light);font-size:12px">·2小关</span></a></li>
+    <li><a href="#level5"><span class="toc-badge bg-5">5</span>挖出病根 <span style="color:var(--text-light);font-size:12px">·2小关</span></a></li>
+    <li><a href="#level6"><span class="toc-badge bg-6">6</span>讲到心坎里 <span style="color:var(--text-light);font-size:12px">·2小关</span></a></li>
+    <li><a href="#level7"><span class="toc-badge bg-7">7</span>我们的底气 <span style="color:var(--text-light);font-size:12px">·1小关</span></a></li>
+    <li><a href="#level8"><span class="toc-badge bg-8">8</span>结业考核 <span style="color:var(--text-light);font-size:12px">·1小关</span></a></li>
+    <li><a href="#schedule"><span class="toc-badge" style="background:var(--green);color:#fff">📅</span>每日学习排期</a></li>
+    <li><a href="#qbank"><span class="toc-badge" style="background:var(--primary);color:#fff">📝</span>题库总览</a></li>
+  </ol>
+</nav>
+
+<!-- Summary -->
+<div class="summary-grid">
+  <div class="summary-card"><div class="sc-num">4min</div><div class="sc-label">每关学习（看秘籍）</div></div>
+  <div class="summary-card"><div class="sc-num">4min</div><div class="sc-label">每关练习（打怪）</div></div>
+  <div class="summary-card"><div class="sc-num">4min</div><div class="sc-label">每关考核（通关）</div></div>
+  <div class="summary-card"><div class="sc-num">12min</div><div class="sc-label">每小关总时长</div></div>
+</div>
+
+<!-- ============ LEVEL 1 ============ -->
+<section class="level" id="level1">
+  <div class="level-header">
+    <div class="level-icon bg-1">🔬</div>
+    <div>
+      <h2>第1关：认识白癜风</h2>
+      <div class="level-sub">不只是"免疫紊乱"——从细胞层面理解到底发生了什么</div>
+    </div>
+    <div class="level-meta">
+      <span class="meta-tag tag-learn">3小关</span>
+      <span class="meta-tag tag-practice">~36min</span>
+    </div>
+  </div>
+
+  <!-- 1-1 -->
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">1-1</span>
+      <span class="sub-level-title">一句话说清楚 + 细胞层面机制</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>白癜风一句话定义（保安叛变比喻）</li>
+          <li>4类细胞角色：黑色素细胞、CD8+T细胞、趋化因子、角质形成细胞</li>
+          <li>细胞链条：T细胞→IFN-γ→CXCL9/10→恶性循环</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>拖拽匹配：细胞→角色→白癜风时发生了什么</li>
+          <li>排序题：把细胞链条按正确顺序排列</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（细胞机制）</li>
+          <li>1道判断题（传染误区）</li>
+          <li>1道口述题：用大白话讲细胞链条</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-2 -->
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">1-2</span>
+      <span class="sub-level-title">中医视角 + 中西医对比</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>中医核心："标"在皮肤，"本"在气血脏腑</li>
+          <li>三大分型：气血不和/肝肾不足/气滞血瘀（人群+表现+方向）</li>
+          <li>中西医对比表（看法/诊断/思路/优劣）</li>
+          <li>治河比喻 + 各阶段中西医配合</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 5张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>拖拽匹配：中医分型→常见人群→典型表现</li>
+          <li>情景判断：给患者描述，判断属于哪个分型</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（中医分型/中西医对比）</li>
+          <li>1道判断题（中医能否单独治疗）</li>
+          <li>1道口述题：三大分型分别是什么+各适合谁</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-3 -->
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">1-3</span>
+      <span class="sub-level-title">病因vs诱因 + 三大误区</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>病因4项：遗传/免疫/氧化应激/神经内分泌</li>
+          <li>诱因5项：压力/暴晒外伤/熬夜/换季感染/化学接触</li>
+          <li>跟患者讲的话术（"根子和导火索"）</li>
+          <li>三大误区：不传染/不一定遗传/不只影响皮肤</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>分类题：把因素拖入"病因"或"诱因"</li>
+          <li>话术接龙：患者问"会传染给小孩吗"→选最佳回答</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（病因诱因分类）</li>
+          <li>1道判断题（遗传概率）</li>
+          <li>1道口述题：同时讲清病因和诱因的区别</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="qbank-section">
+    <h4>📝 本关题库（共12题：9题复用/改编 + 3题新增）</h4>
+    <table class="qbank-table">
+      <tr><th>题号</th><th>题目内容要点</th><th>题型</th><th>来源</th></tr>
+      <tr><td>1-1-1</td><td>黑色素细胞被哪类细胞攻击</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>1-1-2</td><td>细胞链条正确排序</td><td><span class="q-type q-match">排序</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>1-1-3</td><td>白癜风是否传染</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>1-1-4</td><td>口述：用大白话讲细胞链条</td><td><span class="q-type q-oral">口述</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>1-2-1</td><td>气血不和型典型表现</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>1-2-2</td><td>中西医治疗思路对比</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>1-2-3</td><td>中医可以单独治愈白癜风</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>1-2-4</td><td>口述：三大分型+各适合谁</td><td><span class="q-type q-oral">口述</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>1-3-1</td><td>哪个属于病因而非诱因</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>1-3-2</td><td>遗传概率15-20%</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>1-3-3</td><td>白癜风只影响皮肤</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>1-3-4</td><td>口述：同时讲清病因和诱因</td><td><span class="q-type q-oral">口述</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ LEVEL 2 ============ -->
+<section class="level" id="level2">
+  <div class="level-header">
+    <div class="level-icon bg-2">👁️</div>
+    <div>
+      <h2>第2关：看懂病情</h2>
+      <div class="level-sub">患者说"扩散了还是好了"——你一眼能判断</div>
+    </div>
+    <div class="level-meta">
+      <span class="meta-tag tag-learn">2小关</span>
+      <span class="meta-tag tag-practice">~24min</span>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">2-1</span>
+      <span class="sub-level-title">进展期vs稳定期 + 颜色判断 + 同形反应</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>着火比喻：进展期=着火，稳定期=火灭了</li>
+          <li>三个判断维度：白斑变化/边缘/能做什么</li>
+          <li>颜色判断：瓷白=完全脱失，乳白=部分脱失</li>
+          <li>同形反应：外伤→新白斑，进展期不能手术</li>
+          <li>1-2个月可控制扩散</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>看图判断：给白斑描述→选进展期/稳定期</li>
+          <li>情景判断：扩散期患者要手术→选正确回应</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（分期判断/颜色含义）</li>
+          <li>1道判断题（进展期能否手术）</li>
+          <li>1道口述题：进展期和稳定期怎么区分+为什么重要</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">2-2</span>
+      <span class="sub-level-title">稳定期6种方案 + 部位恢复难度</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>6种方案：外用药/308/311/负压种植/细胞悬液/辅助治疗</li>
+          <li>每种方案的原理/适合谁/费用/见效/优劣</li>
+          <li>种植有效率91-95.5%+免费补种政策</li>
+          <li>部位难度排序：面颈→躯干→四肢近端→肢端→黏膜</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 5张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>匹配题：方案→适合人群→费用档位</li>
+          <li>话术接龙：患者要"最贵的方案"→选利他角度回应</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（方案选择/部位难度）</li>
+          <li>1道情景题：面部乳白小面积稳定→列3种方案</li>
+          <li>1道判断题（稳定期必须手术）</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="qbank-section">
+    <h4>📝 本关题库（共8题：5题复用/改编 + 3题新增）</h4>
+    <table class="qbank-table">
+      <tr><th>题号</th><th>题目内容要点</th><th>题型</th><th>来源</th></tr>
+      <tr><td>2-1-1</td><td>进展期判断标准</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>2-1-2</td><td>瓷白色 vs 乳白色含义</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>2-1-3</td><td>进展期可以做手术</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>2-1-4</td><td>口述：区分进展期和稳定期</td><td><span class="q-type q-oral">口述</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>2-2-1</td><td>细胞悬液种植供受比</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>2-2-2</td><td>哪个部位恢复最快</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>2-2-3</td><td>稳定期只有手术一种选择</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>2-2-4</td><td>情景：面部乳白小面积→列方案</td><td><span class="q-type q-scene">情景</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ LEVEL 3 ============ -->
+<section class="level" id="level3">
+  <div class="level-header">
+    <div class="level-icon bg-3">🧰</div>
+    <div>
+      <h2>第3关：我们的武器库</h2>
+      <div class="level-sub">每种武器有代号、有原理、有好有坏——不神话任何方案</div>
+    </div>
+    <div class="level-meta">
+      <span class="meta-tag tag-learn">3小关</span>
+      <span class="meta-tag tag-practice">~36min</span>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">3-1</span>
+      <span class="sub-level-title">药物六兄弟</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>6类药代号：🚒消防员/🤝调解员/🎯精准导弹/💊重武器/🌿后勤/🛡养护</li>
+          <li>每类药的核心作用+至少一个优势和劣势</li>
+          <li>客服不讲"用XX药"，讲"医生会选最合适的方案"</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 6张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>匹配题：代号→药类→核心作用</li>
+          <li>判断对错：哪种药面部慎用/哪种不能长期连用</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（药物代号/作用）</li>
+          <li>1道判断题（客服可以推荐具体药品）</li>
+          <li>1道口述题：背出6类药代号+作用+优劣</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">3-2</span>
+      <span class="sub-level-title">光疗三件套 + 物理治疗</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>光疗核心原理：紫外线→刺激黑素干细胞→抑制T细胞</li>
+          <li>308（精准狙击·主推）vs 311（全身喷洒·辅助）vs 家用（便携·补充）</li>
+          <li>物理治疗：中胚层介入/纳晶导入/点阵激光</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 5张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>匹配题：设备→定位→适合谁</li>
+          <li>选词填空：308光疗原理关键词填空</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（308 vs 311区别/物理治疗适用）</li>
+          <li>1道判断题（家用光疗仪可替代医疗设备）</li>
+          <li>1道口述题：用白话解释308怎么让白斑复色</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">3-3</span>
+      <span class="sub-level-title">中医治疗手段 + 病因筛查</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>内服：汤剂（一人一方）+中成药</li>
+          <li>外治：塌渍/雾化/药浴/外用制剂/针灸拔罐</li>
+          <li>食疗：增铜锌酪氨酸，减VC过量</li>
+          <li>病因筛查4方向：免疫/共病/皮肤/诱因</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 5张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>分类题：中医疗法拖入"内服/外治/调养"</li>
+          <li>匹配题：筛查方向→看什么→对患者价值</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（中医手段分类/筛查方向）</li>
+          <li>1道判断题（所有患者都需要全套中医治疗）</li>
+          <li>1道口述题：中医内服外治各2种+适合什么</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="qbank-section">
+    <h4>📝 本关题库（共12题：8题复用/改编 + 4题新增）</h4>
+    <table class="qbank-table">
+      <tr><th>题号</th><th>题目内容要点</th><th>题型</th><th>来源</th></tr>
+      <tr><td>3-1-1</td><td>外用激素代号和作用</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>3-1-2</td><td>JAK抑制剂核心机制</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>3-1-3</td><td>客服可以直接推荐具体药品</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>3-1-4</td><td>口述：6类药代号+作用+优劣</td><td><span class="q-type q-oral">口述</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>3-2-1</td><td>308准分子激光波长</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>3-2-2</td><td>311 UVB适合什么情况</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>3-2-3</td><td>家用光疗仪能量等同医疗设备</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>3-2-4</td><td>口述：308光疗原理大白话</td><td><span class="q-type q-oral">口述</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>3-3-1</td><td>中药塌渍属于内服还是外治</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>3-3-2</td><td>趋化因子检测属于哪类筛查</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>3-3-3</td><td>每个患者都需要全套中医治疗</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>3-3-4</td><td>口述：中医内服外治各2种</td><td><span class="q-type q-oral">口述</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ LEVEL 4 ============ -->
+<section class="level" id="level4">
+  <div class="level-header">
+    <div class="level-icon bg-4">🌱</div>
+    <div>
+      <h2>第4关：明白怎么治</h2>
+      <div class="level-sub">不是记住一堆方案，而是理解怎么帮患者选</div>
+    </div>
+    <div class="level-meta">
+      <span class="meta-tag tag-learn">2小关</span>
+      <span class="meta-tag tag-practice">~24min</span>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">4-1</span>
+      <span class="sub-level-title">种地比喻 + 五条铁律</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>种地四步：除草(药物)→松土(光疗)→播种(种植)→追肥(辅助)</li>
+          <li>核心：找到患者缺哪一步，只做那一步</li>
+          <li>五条铁律：先灭火再装修/量体裁衣/打组合拳/先简后繁/分阶段分部位</li>
+          <li>每条铁律的"对患者好处"</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 5张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>匹配题：种地四步→对应治疗手段</li>
+          <li>排序题：治疗顺序正确排列</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（种地步骤/铁律理解）</li>
+          <li>1道判断题（所有患者都需要四步全做）</li>
+          <li>1道口述题：用种地比喻讲全流程+"缺哪步做哪步"</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">4-2</span>
+      <span class="sub-level-title">样板间策略 + 安全概念 + 特殊人群</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>样板间策略：先做面颈→躯干→四肢→肢端</li>
+          <li>平台期：暂停2-4周→换策略</li>
+          <li>皮肤屏障受损：减少频率→保湿修复</li>
+          <li>安全大于疗效</li>
+          <li>儿童/老人/孕妇注意事项</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 5张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>情景判断：照光5个月没效果→选正确建议</li>
+          <li>匹配题：特殊人群→注意事项</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（样板间顺序/平台期处理）</li>
+          <li>1道情景题：面部+腰部+手部白斑预算有限→规划</li>
+          <li>1道判断题（孕妇可以用JAK抑制剂）</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="qbank-section">
+    <h4>📝 本关题库（共8题：4题复用/改编 + 4题新增）</h4>
+    <table class="qbank-table">
+      <tr><th>题号</th><th>题目内容要点</th><th>题型</th><th>来源</th></tr>
+      <tr><td>4-1-1</td><td>种地四步正确顺序</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>4-1-2</td><td>"先灭火再装修"含义</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>4-1-3</td><td>所有患者都需要四步全做</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>4-1-4</td><td>口述：种地比喻全流程</td><td><span class="q-type q-oral">口述</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>4-2-1</td><td>样板间策略先做哪个部位</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>4-2-2</td><td>照光平台期怎么处理</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>4-2-3</td><td>孕妇可口服激素控制</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>4-2-4</td><td>情景：多部位白斑预算有限规划</td><td><span class="q-type q-scene">情景</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ LEVEL 5 ============ -->
+<section class="level" id="level5">
+  <div class="level-header">
+    <div class="level-icon bg-5">🔍</div>
+    <div>
+      <h2>第5关：挖出病根</h2>
+      <div class="level-sub">不找到根源，治了也白治——问诊是为了帮患者</div>
+    </div>
+    <div class="level-meta">
+      <span class="meta-tag tag-learn">2小关</span>
+      <span class="meta-tag tag-practice">~24min</span>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">5-1</span>
+      <span class="sub-level-title">5个问诊方向 + 反复发作原因</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>5个核心问题：发病时间/之前治疗/反复规律/扩散稳定/部位面积</li>
+          <li>每个问题后跟"对您有什么好处"</li>
+          <li>反复5大原因：TRM潜伏/共病/诱因持续/顺序错了/过早停药</li>
+          <li>跟患者解释复发的话术</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 5张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>匹配题：问诊问题→对患者的好处</li>
+          <li>话术接龙：患者说"治好了又犯"→选正确回应</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（问诊方向/反复原因）</li>
+          <li>1道判断题（问诊就是收集信息不用解释）</li>
+          <li>1道口述题：5个问诊方向+每个好处</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">5-2</span>
+      <span class="sub-level-title">前兆线索 + 病因筛查价值</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>5个前兆：荨麻疹/湿疹/贫血/疫苗后/重大病史</li>
+          <li>"容易走火的枪"比喻</li>
+          <li>帮患者串联前兆→"为什么是我"</li>
+          <li>病因筛查4方向的价值（让治疗有靶心）</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>匹配题：前兆信号→与白癜风的关联</li>
+          <li>情景判断：患者提到疫苗后白斑加重→选回应方向</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（前兆信号/筛查方向）</li>
+          <li>1道情景题：两年复发三次→分析原因给建议</li>
+          <li>1道判断题（荨麻疹和白癜风完全无关）</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="qbank-section">
+    <h4>📝 本关题库（共8题：3题复用/改编 + 5题新增）</h4>
+    <table class="qbank-table">
+      <tr><th>题号</th><th>题目内容要点</th><th>题型</th><th>来源</th></tr>
+      <tr><td>5-1-1</td><td>问诊第一个问题应该问什么</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>5-1-2</td><td>TRM细胞是什么角色</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>5-1-3</td><td>问诊像查户口不用解释原因</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>5-1-4</td><td>口述：5个问诊方向+好处</td><td><span class="q-type q-oral">口述</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>5-2-1</td><td>哪个可能是白癜风前兆</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>5-2-2</td><td>病因筛查的核心目的</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>5-2-3</td><td>荨麻疹和白癜风没有关联</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>5-2-4</td><td>情景：两年复发三次分析</td><td><span class="q-type q-scene">情景</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ LEVEL 6 ============ -->
+<section class="level" id="level6">
+  <div class="level-header">
+    <div class="level-icon bg-6">💬</div>
+    <div>
+      <h2>第6关：讲到心坎里</h2>
+      <div class="level-sub">不是背话术，是从患者角度想问题</div>
+    </div>
+    <div class="level-meta">
+      <span class="meta-tag tag-learn">2小关</span>
+      <span class="meta-tag tag-practice">~24min</span>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">6-1</span>
+      <span class="sub-level-title">费用/疗效/信任三大应对</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>费用：不随口报价→先照片评估→帮患者找预算内方案</li>
+          <li>疗效：不承诺→给真实数据91-95.5%+免费补种</li>
+          <li>信任：先认同→给事实→降门槛（零风险评估）</li>
+          <li>不说"比三甲好"，说"更专注"</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>话术接龙：患者问"多少钱"→选最佳回应</li>
+          <li>话术接龙：患者说"民营都是骗人的"→选回应</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道情景题（费用追问/信任质疑）</li>
+          <li>1道判断题（可以承诺"基本都能治好"安抚患者）</li>
+          <li>1道口述题：患者问"保证治好吗"完整回答</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">6-2</span>
+      <span class="sub-level-title">距离/犹豫应对 + 沟通红线</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>"太远了"：先线上评估→手术1-2天→术后当地复查</li>
+          <li>"再考虑"：不急不催→早评估早安心→随时找我</li>
+          <li>6条红线：不自称医生/不承诺/不随口报价/不贬低/不催逼/不刷屏</li>
+          <li>3天3次触达封顶</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>判断对错：给6个客服回应，判断是否踩红线</li>
+          <li>话术接龙：患者说"再考虑考虑"→选正确回应</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（红线判断/距离应对）</li>
+          <li>1道口述题：列举3条红线+为什么不能做</li>
+          <li>1道情景题：患者坚持要数字不发照片→应对</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="qbank-section">
+    <h4>📝 本关题库（共8题：2题复用/改编 + 6题新增）</h4>
+    <table class="qbank-table">
+      <tr><th>题号</th><th>题目内容要点</th><th>题型</th><th>来源</th></tr>
+      <tr><td>6-1-1</td><td>患者第一句问多少钱怎么应对</td><td><span class="q-type q-scene">情景</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>6-1-2</td><td>种植有效率数据</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>6-1-3</td><td>可以说"基本都能治好"安抚患者</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>6-1-4</td><td>口述：保证治好吗完整回答</td><td><span class="q-type q-oral">口述</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>6-2-1</td><td>哪条属于沟通红线</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>6-2-2</td><td>3天3次触达封顶规则</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>6-2-3</td><td>客服可以自称"主任"增加可信度</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>6-2-4</td><td>情景：坚持要数字不发照片</td><td><span class="q-type q-scene">情景</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ LEVEL 7 ============ -->
+<section class="level" id="level7">
+  <div class="level-header">
+    <div class="level-icon bg-7">🏛️</div>
+    <div>
+      <h2>第7关：我们的底气</h2>
+      <div class="level-sub">不是比谁好，是更专注</div>
+    </div>
+    <div class="level-meta">
+      <span class="meta-tag tag-learn">1小关</span>
+      <span class="meta-tag tag-practice">~12min</span>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">7-1</span>
+      <span class="sub-level-title">首诊负责制 + 讲什么看时机 + 完整对话</span>
+      <span class="sub-level-time">约12分钟</span>
+    </div>
+    <div class="lpc-grid">
+      <div class="lpc-card lpc-learn">
+        <h4>📖 学·看秘籍</h4>
+        <ul>
+          <li>首诊负责制：一个医生从头到尾（专属管家vs流水线）</li>
+          <li>每次记录：标准照片/用药方案/恢复百分比/3月评估</li>
+          <li>讲什么看时机：问设备讲设备/问手术讲手术/犹豫讲服务</li>
+          <li>完整对话节奏：判断→找缺失→建议方向→带出价值→降门槛</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4张卡片</span>
+      </div>
+      <div class="lpc-card lpc-practice">
+        <h4>⚔️ 练·打怪</h4>
+        <ul>
+          <li>排序题：正确对话节奏排列</li>
+          <li>匹配题：患者关心什么→你讲什么</li>
+        </ul>
+        <span class="time-badge">约4分钟</span>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>✅ 考·通关</h4>
+        <ul>
+          <li>2道选择题（首诊制意义/对话节奏）</li>
+          <li>1道情景题：面部白斑半年不稳定没查过→完整对话</li>
+          <li>1道判断题（首诊制就是每次换不同医生）</li>
+        </ul>
+        <span class="time-badge">约4分钟 · 4题</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="qbank-section">
+    <h4>📝 本关题库（共4题：1题复用/改编 + 3题新增）</h4>
+    <table class="qbank-table">
+      <tr><th>题号</th><th>题目内容要点</th><th>题型</th><th>来源</th></tr>
+      <tr><td>7-1-1</td><td>首诊负责制核心含义</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-reuse">复用</span></td></tr>
+      <tr><td>7-1-2</td><td>患者犹豫不信时该讲什么</td><td><span class="q-type q-choice">选择</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>7-1-3</td><td>首诊负责制每次换不同医生</td><td><span class="q-type q-judge">判断</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+      <tr><td>7-1-4</td><td>情景：完整利他型对话模拟</td><td><span class="q-type q-scene">情景</span></td><td><span class="meta-tag tag-new">新增</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ LEVEL 8 ============ -->
+<section class="level" id="level8">
+  <div class="level-header">
+    <div class="level-icon bg-8">🏆</div>
+    <div>
+      <h2>第8关：结业考核（BOSS战）</h2>
+      <div class="level-sub">综合全部内容，通关即可上线接咨询</div>
+    </div>
+    <div class="level-meta">
+      <span class="meta-tag tag-exam">终极考核</span>
+      <span class="meta-tag tag-practice">~20min</span>
+    </div>
+  </div>
+
+  <div class="sub-level">
+    <div class="sub-level-header">
+      <span class="sub-level-num">8-1</span>
+      <span class="sub-level-title">综合笔试 + AI实战模拟</span>
+      <span class="sub-level-time">约20分钟</span>
+    </div>
+    <div class="lpc-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="lpc-card lpc-exam" style="background: #FFF0E8;">
+        <h4>📝 第一部分：综合笔试（10分钟）</h4>
+        <ul>
+          <li>判断题5题（从各关判断题随机抽）</li>
+          <li>选择题8题（从各关选择题随机抽）</li>
+          <li>每题限时45秒</li>
+          <li>70%正确率方可进入第二部分</li>
+        </ul>
+      </div>
+      <div class="lpc-card lpc-exam">
+        <h4>🤖 第二部分：AI实战模拟（10分钟）</h4>
+        <ul>
+          <li>AI扮演患者，5轮对话</li>
+          <li>考察完整节奏：判断→找缺失→建议→价值→降门槛</li>
+          <li>6维度评分：问诊25%/分析20%/共情15%/专业15%/转化15%/话术10%</li>
+          <li>70分通关，80分以上优秀</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-box" style="margin-top:16px;">
+      <strong>通关规则：</strong>笔试+实战综合80分以上发"通关认证"可上线；70-79分及格但沟通需重点培训；低于70分重学薄弱模块后补考。补考分数递减机制同小关。
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCHEDULE ============ -->
+<section class="schedule-section" id="schedule">
+  <h3>📅 每日学习排期（建议）</h3>
+  <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">每天一个小关，10-15分钟，16天通关。第8关结业考核建议安排在第17天。</p>
+  <div class="schedule-grid">
+    <div class="schedule-day"><div class="day-num">Day 1</div><div class="day-title">1-1 细胞机制</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 2</div><div class="day-title">1-2 中医视角</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 3</div><div class="day-title">1-3 病因误区</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 4</div><div class="day-title">2-1 分期判断</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 5</div><div class="day-title">2-2 稳定期方案</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 6</div><div class="day-title">3-1 药物六兄弟</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 7</div><div class="day-title">3-2 光疗物理</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 8</div><div class="day-title">3-3 中医筛查</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 9</div><div class="day-title">4-1 种地铁律</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 10</div><div class="day-title">4-2 样板间安全</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 11</div><div class="day-title">5-1 问诊反复</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 12</div><div class="day-title">5-2 前兆筛查</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 13</div><div class="day-title">6-1 费用疗效信任</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 14</div><div class="day-title">6-2 距离红线</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 15</div><div class="day-title">7-1 首诊底气</div><div class="day-time">12min</div></div>
+    <div class="schedule-day"><div class="day-num">Day 16</div><div class="day-title">复习薄弱关</div><div class="day-time">自选</div></div>
+    <div class="schedule-day boss"><div class="day-num">Day 17</div><div class="day-title">🏆 结业考核</div><div class="day-time">20min</div></div>
+  </div>
+  <div class="tip-box" style="margin-top:16px;">
+    <strong>灵活调整：</strong>客服可以一天多关（基础好的），也可以一天只做半关（内容多的日子）。系统不强制每天只能做一关，但排行榜按"首次通过分数"排名，鼓励认真对待每一次。
+  </div>
+</section>
+
+<!-- ============ QUESTION BANK SUMMARY ============ -->
+<section class="schedule-section" id="qbank">
+  <h3>📝 题库总览</h3>
+  <table class="qbank-table" style="margin-bottom:20px;">
+    <tr>
+      <th>关卡</th><th>小关数</th><th>选择题</th><th>判断题</th><th>口述题</th><th>情景题</th><th>练习题</th><th>合计题量</th>
+    </tr>
+    <tr><td>第1关 认识白癜风</td><td>3</td><td>6</td><td>3</td><td>3</td><td>0</td><td>6</td><td><strong>18</strong></td></tr>
+    <tr><td>第2关 看懂病情</td><td>2</td><td>4</td><td>2</td><td>1</td><td>1</td><td>4</td><td><strong>12</strong></td></tr>
+    <tr><td>第3关 武器库</td><td>3</td><td>6</td><td>3</td><td>3</td><td>0</td><td>6</td><td><strong>18</strong></td></tr>
+    <tr><td>第4关 明白怎么治</td><td>2</td><td>4</td><td>2</td><td>1</td><td>1</td><td>4</td><td><strong>12</strong></td></tr>
+    <tr><td>第5关 挖出病根</td><td>2</td><td>4</td><td>2</td><td>1</td><td>1</td><td>4</td><td><strong>12</strong></td></tr>
+    <tr><td>第6关 讲到心坎里</td><td>2</td><td>2</td><td>2</td><td>1</td><td>3</td><td>4</td><td><strong>12</strong></td></tr>
+    <tr><td>第7关 我们的底气</td><td>1</td><td>2</td><td>1</td><td>0</td><td>1</td><td>2</td><td><strong>6</strong></td></tr>
+    <tr style="background:var(--primary-light);font-weight:700;">
+      <td>小计（小关考核）</td><td>15</td><td>28</td><td>15</td><td>10</td><td>7</td><td>30</td><td>90</td>
+    </tr>
+    <tr style="background:#FFF8E6;">
+      <td>第8关 结业考核</td><td>1</td><td>8</td><td>5</td><td>0</td><td>AI模拟</td><td>0</td><td><strong>13+AI</strong></td></tr>
+    </tr>
+    <tr style="background:#E8F8F1;font-weight:700;">
+      <td>总计</td><td>16</td><td>36</td><td>20</td><td>10</td><td>7+AI</td><td>30</td><td>103+AI</td>
+    </tr>
+  </table>
+
+  <div class="summary-grid" style="margin-bottom:0;">
+    <div class="summary-card">
+      <div class="sc-num" style="color:var(--green);">~60</div>
+      <div class="sc-label">复用/改编现有题库</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-num" style="color:var(--pink);">~43</div>
+      <div class="sc-label">需新增题目</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-num" style="color:var(--orange);">30</div>
+      <div class="sc-label">互动练习题（拖拽/匹配）</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-num" style="color:var(--primary);">AI</div>
+      <div class="sc-label">结业实战模拟（已有）</div>
+    </div>
+  </div>
+
+  <div class="tip-box" style="margin-top:20px;">
+    <strong>题库设计原则：</strong>
+    ① 选择题和判断题从现有210题中按新8关分类筛选，重复或过时的淘汰；
+    ② 口述题和情景题大量新增——这是防作弊核心，考的是理解不是记忆；
+    ③ 练习题（拖拽/匹配/排序）不计入考核成绩，纯练手用；
+    ④ 每个小关考核题从题库随机抽，选项打乱，每个人不完全一样。
+  </div>
+</section>
+
+<footer>
+  白癜风客服训练营 · 8关16小关结构设计 · 内部培训专用<br>
+  基于《专业框架》和《专业话术》两份文档整理 · 不作为医疗建议
+</footer>
+
+</main>
+
+<script>
+// Smooth scroll for TOC links
+document.querySelectorAll('nav.toc a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
