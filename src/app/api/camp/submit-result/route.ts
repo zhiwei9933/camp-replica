@@ -7,6 +7,7 @@ import {
   getQuestionMetaMap,
 } from '@/lib/camp-weak';
 import { applyLLMFallback } from '@/lib/camp-llm-scoring';
+import { verifyAdmin } from '@/lib/admin-auth';
 
 export const RESULTS_KEY = 'camp_results';
 // 考核成绩永久保留（直到主管明确清除），写入时不设置 TTL / EXPIRE
@@ -458,10 +459,18 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const identity = verifyAdmin(request);
+  if (!identity) {
+    return NextResponse.json({ success: false, error: '未登录或登录已过期', results: [] }, { status: 401 });
+  }
   try {
     const results = await readAllResults();
-    return NextResponse.json({ success: true, results });
+    // 项目主管只能看到本项目数据
+    const scoped = identity.role === 'manager'
+      ? results.filter((r) => r.city === identity.city)
+      : results;
+    return NextResponse.json({ success: true, results: scoped });
   } catch (error) {
     console.error('[camp/submit-result GET] Error:', error);
     return NextResponse.json({ success: true, results: [], error: String(error) });

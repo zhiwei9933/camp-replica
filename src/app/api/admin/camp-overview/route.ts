@@ -8,6 +8,7 @@ import {
   type CampEmployeeSummary,
 } from '@/lib/camp-admin-agg';
 import type { WeakEntry } from '@/lib/camp-weak';
+import { verifyAdmin } from '@/lib/admin-auth';
 
 /**
  * 主管后台：训练营完成度 + 薄弱作答总览
@@ -21,8 +22,13 @@ import type { WeakEntry } from '@/lib/camp-weak';
  */
 export async function GET(request: NextRequest) {
   try {
+    const identity = verifyAdmin(request);
+    if (!identity) {
+      return NextResponse.json({ success: false, error: '未登录或登录已过期' }, { status: 401 });
+    }
     const { searchParams } = new URL(request.url);
-    const city = searchParams.get('city') || '';
+    // 项目主管强制锁定本项目，忽略前端传入的城市参数
+    const city = identity.role === 'manager' ? (identity.city || '__none__') : searchParams.get('city') || '';
     const staffName = searchParams.get('staffName') || '';
 
     const snap = getMemorySnapshot();

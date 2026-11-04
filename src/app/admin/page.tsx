@@ -162,6 +162,15 @@ const DIM_LABELS: Record<string, string> = {
 
 type Tab = 'overview' | 'camp' | 'quiz' | 'training';
 
+interface AdminUser {
+  username: string;
+  name: string;
+  role: 'super' | 'manager';
+  city: string | null;
+}
+
+const SESSION_KEY = 'camp_admin_session';
+
 export default function AdminPage() {
   const [tab, setTab] = useState<Tab>('overview');
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
@@ -195,26 +204,63 @@ export default function AdminPage() {
   const [deleteError, setDeleteError] = useState('');
   const [tokenInput, setTokenInput] = useState('');
 
+  // 登录会话
+  const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
+  const [loginName, setLoginName] = useState('');
+  const [loginPwd, setLoginPwd] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [pwdOpen, setPwdOpen] = useState(false);
+  const [pwdOld, setPwdOld] = useState('');
+  const [pwdNew, setPwdNew] = useState('');
+  const [pwdMsg, setPwdMsg] = useState('');
+
   useEffect(() => {
-    const t = typeof window !== 'undefined' ? sessionStorage.getItem('camp_admin_token') || '' : '';
-    setAdminToken(t);
+    try {
+      const raw = typeof window !== 'undefined' ? sessionStorage.getItem(SESSION_KEY) : null;
+      if (raw) {
+        const parsed = JSON.parse(raw) as { token?: string; user?: AdminUser };
+        if (parsed?.token && parsed?.user) {
+          setAdminToken(parsed.token);
+          setAdminUser(parsed.user);
+        }
+      }
+    } catch {
+      /* 会话解析失败按未登录处理 */
+    }
     setTokenChecked(true);
   }, []);
 
+  // 主管登录后自动锁定本项目
   useEffect(() => {
-    fetchAll();
-  }, []);
+    if (adminUser?.role === 'manager' && adminUser.city) {
+      setCityFilter(CITY_SLUG_TO_ZH[adminUser.city] || '全部');
+    }
+  }, [adminUser]);
+
+  useEffect(() => {
+    if (adminToken) void fetchAll();
+  }, [adminToken]);
 
   const fetchAll = async () => {
     setLoading(true);
     setError('');
     try {
+      const authHeaders = { 'x-admin-token': adminToken };
       const [quizRes, trainRes, campRes, overviewRes] = await Promise.all([
-        fetch('/api/admin/results'),
-        fetch('/api/admin/training-results'),
-        fetch('/api/camp/submit-result'),
-        fetch('/api/admin/camp-overview'),
+        fetch('/api/admin/results', { headers: authHeaders }),
+        fetch('/api/admin/training-results', { headers: authHeaders }),
+        fetch('/api/camp/submit-result', { headers: authHeaders }),
+        fetch('/api/admin/camp-overview', { headers: authHeaders }),
       ]);
+      // 会话过期：自动退回登录页
+      if (quizRes.status === 401 || trainRes.status === 401 || campRes.status === 401 || overviewRes.status === 401) {
+        sessionStorage.removeItem(SESSION_KEY);
+        setAdminToken('');
+        setAdminUser(null);
+        setLoading(false);
+        return;
+      }
       const [quizData, trainData, campData, overviewData] = await Promise.all([
         quizRes.json(),
         trainRes.json(),
@@ -411,6 +457,77 @@ export default function AdminPage() {
     return ['全部', ...Array.from(set).sort()];
   }, [campResults]);
 
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!loginName.trim() || !loginPwd) {
+      setLoginError('请输入账号和密码');
+      return;
+    }
+    setLoginLoading(true);
+    setLoginError('');
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: loginName.trim(), password: loginPwd }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.success) {
+        setLoginError(data?.error || `登录失败（${res.status}）`);
+        return;
+      }
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({ token: data.token, user: data.user }));
+      setAdminToken(data.token);
+      setAdminUser(data.user);
+      setLoginPwd('');
+    } catch {
+      setLoginError('网络错误，请重试');
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem('camp_admin_token');
+    setAdminToken('');
+    setAdminUser(null);
+    setQuizResults([]);
+    setTrainingResults([]);
+    setCampResults([]);
+    setSummary([]);
+    setWeakEntries([]);
+  };
+
+  const handleChangePwd = async () => {
+    setPwdMsg('');
+    if (!pwdOld || !pwdNew) {
+      setPwdMsg('请填写原密码和新密码');
+      return;
+    }
+    if (pwdNew.length < 6) {
+      setPwdMsg('新密码至少 6 位');
+      return;
+    }
+    try {
+      const res = await fetch('/api/admin/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+        body: JSON.stringify({ oldPassword: pwdOld, newPassword: pwdNew }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.success) {
+        setPwdMsg(data?.error || '修改失败');
+        return;
+      }
+      setPwdMsg('密码已修改，下次请用新密码登录');
+      setPwdOld('');
+      setPwdNew('');
+    } catch {
+      setPwdMsg('网络错误，请重试');
+    }
+  };
+
   const openDeleteDialog = async (s: CampEmployeeSummary) => {
     setDeleteError('');
     setDeleteConfirmName('');
@@ -487,6 +604,58 @@ export default function AdminPage() {
     }
   };
 
+  // 未登录：显示账号密码登录页
+  if (tokenChecked && !adminToken) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+        <div className="w-full max-w-sm bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+          <h1 className="text-xl font-bold text-slate-800 mb-1">培训成绩管理</h1>
+          <p className="text-sm text-slate-500 mb-6">请使用后台账号登录</p>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-600 mb-1">账号</label>
+              <input
+                value={loginName}
+                onChange={(e) => setLoginName(e.target.value)}
+                autoComplete="username"
+                placeholder="请输入账号"
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-600 mb-1">密码</label>
+              <input
+                type="password"
+                value={loginPwd}
+                onChange={(e) => setLoginPwd(e.target.value)}
+                autoComplete="current-password"
+                placeholder="请输入密码"
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+              />
+            </div>
+            {loginError && (
+              <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{loginError}</div>
+            )}
+            <button
+              type="submit"
+              disabled={loginLoading}
+              className="w-full py-2.5 bg-sky-500 text-white rounded-lg text-sm font-medium hover:bg-sky-600 disabled:opacity-60"
+            >
+              {loginLoading ? '登录中...' : '登录'}
+            </button>
+          </form>
+          <div className="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 leading-relaxed">
+            首次使用默认账号：<br />
+            超管 admin / admin888<br />
+            合肥主管 hefei / hefei888<br />
+            杭州主管 hangzhou / hangzhou888<br />
+            登录后请点右上角「修改密码」尽快更换。
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
@@ -528,15 +697,42 @@ export default function AdminPage() {
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between flex-wrap gap-2">
           <div>
-            <h1 className="text-xl font-bold text-slate-800">培训成绩管理</h1>
-            <p className="text-sm text-slate-500">训练营闯关 / 知识考核 / 模拟对话 一站式管理</p>
+            <h1 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+              培训成绩管理
+              {adminUser && (
+                <span className="px-2 py-0.5 rounded-md bg-sky-50 text-sky-700 text-xs font-medium border border-sky-100">
+                  {adminUser.role === 'super'
+                    ? '超级管理员'
+                    : `${CITY_SLUG_TO_ZH[adminUser.city || ''] || ''}主管`}
+                </span>
+              )}
+            </h1>
+            <p className="text-sm text-slate-500">
+              {adminUser?.role === 'manager'
+                ? `仅显示本项目数据（${CITY_SLUG_TO_ZH[adminUser.city || ''] || '—'}）`
+                : '训练营闯关 / 知识考核 / 模拟对话 一站式管理'}
+            </p>
           </div>
-          <button
-            onClick={fetchAll}
-            className="px-4 py-2 bg-sky-500 text-white rounded-lg text-sm font-medium hover:bg-sky-600"
-          >
-            刷新数据
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={fetchAll}
+              className="px-4 py-2 bg-sky-500 text-white rounded-lg text-sm font-medium hover:bg-sky-600"
+            >
+              刷新数据
+            </button>
+            <button
+              onClick={() => { setPwdOpen(true); setPwdMsg(''); }}
+              className="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50"
+            >
+              修改密码
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-white border border-slate-300 text-slate-500 rounded-lg text-sm font-medium hover:bg-slate-50"
+            >
+              退出
+            </button>
+          </div>
         </div>
       </header>
 
@@ -568,9 +764,15 @@ export default function AdminPage() {
           <div className="flex flex-wrap gap-4 items-center">
             <div className="flex items-center gap-2">
               <label className="text-sm text-slate-600 font-medium">城市</label>
-              <select value={cityFilter} onChange={(e) => setCityFilter(e.target.value)} className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm bg-white">
-                {CITY_OPTIONS.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
+              {adminUser?.role === 'manager' ? (
+                <span className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm bg-slate-50 text-slate-600">
+                  {CITY_SLUG_TO_ZH[adminUser.city || ''] || '—'}
+                </span>
+              ) : (
+                <select value={cityFilter} onChange={(e) => setCityFilter(e.target.value)} className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm bg-white">
+                  {CITY_OPTIONS.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <label className="text-sm text-slate-600 font-medium">员工</label>
@@ -1125,6 +1327,49 @@ export default function AdminPage() {
       </div>
 
       {/* 删除离职学员：无管理口令时先要求口令 */}
+      {pwdOpen && (
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center px-4">
+          <div className="w-full max-w-sm bg-white rounded-2xl p-6 shadow-xl">
+            <h2 className="text-lg font-bold text-slate-800 mb-4">修改密码</h2>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm text-slate-600 mb-1">原密码</label>
+                <input
+                  type="password"
+                  value={pwdOld}
+                  onChange={(e) => setPwdOld(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-slate-600 mb-1">新密码（至少 6 位）</label>
+                <input
+                  type="password"
+                  value={pwdNew}
+                  onChange={(e) => setPwdNew(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                />
+              </div>
+              {pwdMsg && <div className="text-sm text-sky-700 bg-sky-50 border border-sky-200 rounded-lg px-3 py-2">{pwdMsg}</div>}
+            </div>
+            <div className="flex justify-end gap-2 mt-5">
+              <button
+                onClick={() => setPwdOpen(false)}
+                className="px-4 py-2 border border-slate-300 rounded-lg text-sm text-slate-600"
+              >
+                关闭
+              </button>
+              <button
+                onClick={handleChangePwd}
+                className="px-4 py-2 bg-sky-500 text-white rounded-lg text-sm font-medium hover:bg-sky-600"
+              >
+                确认修改
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {deleteTarget && !adminToken && adminTokenGate}
 
       {/* 删除离职学员：二次确认（手动输入姓名完全匹配） */}

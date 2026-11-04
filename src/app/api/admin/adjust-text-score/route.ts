@@ -5,6 +5,7 @@ import {
   recomputeBestScore,
   recomputeExamScore,
 } from '@/lib/camp-scoring';
+import { verifyAdmin, canAccessCity } from '@/lib/admin-auth';
 
 interface AdjustBody {
   staffName: string;
@@ -17,6 +18,10 @@ interface AdjustBody {
 }
 
 export async function POST(request: NextRequest) {
+  const identity = verifyAdmin(request);
+  if (!identity) {
+    return NextResponse.json({ success: false, error: '未登录或登录已过期' }, { status: 401 });
+  }
   try {
     const body = (await request.json()) as Partial<AdjustBody>;
     const { staffName, city, subId, questionId } = body;
@@ -27,6 +32,9 @@ export async function POST(request: NextRequest) {
         { success: false, error: '缺少必要参数 staffName/city/subId/questionId' },
         { status: 400 },
       );
+    }
+    if (!canAccessCity(identity, city)) {
+      return NextResponse.json({ success: false, error: '只能调整本项目学员' }, { status: 403 });
     }
     if (![0, 0.5, 1].includes(awarded)) {
       return NextResponse.json(

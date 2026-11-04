@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { upstashCommand } from '@/lib/upstash';
-import { isAuthorizedAdmin } from '@/lib/admin-auth';
+import { verifyAdmin, canAccessCity } from '@/lib/admin-auth';
 import { CAMP_WEAK_PREFIX } from '@/lib/camp-weak';
 import { invalidateOverviewSnapshot } from '@/lib/camp-admin-agg';
 import { invalidateLeaderboardSnapshot } from '@/lib/camp-leaderboard-agg';
@@ -31,13 +31,17 @@ interface DeletedRecord {
  * 删除前预览：需管理口令。返回该学员名下将被删除的数据清单（不改任何数据）。
  */
 export async function GET(req: NextRequest) {
-  if (!isAuthorizedAdmin(req)) {
-    return NextResponse.json({ success: false, error: '无管理权限或管理口令缺失/错误' }, { status: 401 });
+  const identity = verifyAdmin(req);
+  if (!identity) {
+    return NextResponse.json({ success: false, error: '未登录或登录已过期' }, { status: 401 });
   }
   const city = req.nextUrl.searchParams.get('city')?.trim() || '';
   const staffName = req.nextUrl.searchParams.get('staffName')?.trim() || '';
   if (!city || !staffName) {
     return NextResponse.json({ success: false, error: '缺少 city 或 staffName' }, { status: 400 });
+  }
+  if (!canAccessCity(identity, city)) {
+    return NextResponse.json({ success: false, error: '只能操作本项目学员' }, { status: 403 });
   }
 
   const weakKey = `${CAMP_WEAK_PREFIX}${city}:${staffName}`;
@@ -88,9 +92,10 @@ export async function GET(req: NextRequest) {
  * 精确按 city+staffName 过滤，绝不波及其他学员；不动 training_results/quiz_results。
  */
 export async function POST(req: NextRequest) {
-  // 1) 服务端管理鉴权（学员免密身份不可调用）
-  if (!isAuthorizedAdmin(req)) {
-    return NextResponse.json({ success: false, error: '无管理权限或管理口令缺失/错误' }, { status: 401 });
+  // 1) 服务端鉴权（学员免密身份不可调用；项目主管仅限本项目）
+  const identity = verifyAdmin(req);
+  if (!identity) {
+    return NextResponse.json({ success: false, error: '未登录或登录已过期' }, { status: 401 });
   }
 
   let body: DeleteBody;
@@ -107,6 +112,9 @@ export async function POST(req: NextRequest) {
 
   if (!city || !staffName) {
     return NextResponse.json({ success: false, error: '缺少 city 或 staffName' }, { status: 400 });
+  }
+  if (!canAccessCity(identity, city)) {
+    return NextResponse.json({ success: false, error: '只能删除本项目学员' }, { status: 403 });
   }
   // 2) 二次确认：必须手动输入完全一致的姓名
   if (confirmName !== staffName) {
